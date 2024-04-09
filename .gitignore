@@ -1,0 +1,22 @@
+# Dotenv
+/.env
+
+# Composer
+/composer.lock
+/vendor/
+/vendor-bin/**/composer.lock
+/vendor-bin/**/vendor/
+
+# Build
+/build/
+
+# PHPUnit
+/.phpunit.cache/
+/phpunit.xml
+
+# PHPStan
+/phpstan.neon
+
+# PHP CS Fixer
+/.php-cs-fixer.php
+/.php-cs-fixer.cache

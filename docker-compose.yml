@@ -1,0 +1,13 @@
+version: "3.7"
+
+services:
+  app:
+    build:
+      context: ./docker/php
+      args:
+        UID: ${APP_UID}
+        GID: ${APP_GID}
+    tty: true
+    volumes:
+      - .:/var/www
+    working_dir: /var/www
