@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Ngmy\LaravelAop;
 
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Koriym\Attributes\AttributeReader;
 use Ngmy\LaravelAop\Collections\InterceptMap;
 use Ngmy\LaravelAop\Commands\CompileCommand;
 use Ngmy\LaravelAop\Services\ServiceRegistrar;
 use Ngmy\LaravelAop\ValueObjects\CompiledPath;
+use Ray\ServiceLocator\ServiceLocator;
 
 final class ServiceProvider extends BaseServiceProvider
 {
@@ -25,6 +27,8 @@ final class ServiceProvider extends BaseServiceProvider
             ->needs('$items')
             ->giveConfig('aop.intercept')
         ;
+
+        ServiceLocator::setReader(new AttributeReader());
 
         $registrar = $this->app->make(ServiceRegistrar::class);
         $registrar->bind();
