@@ -133,8 +133,8 @@ composer dump-autoload
 ```
 
 > [!IMPORTANT]
-> After changing the `intercept` configuration option or changing the annotation of the methods, you should compile
-> the AOP classes again.
+> After modifying the `intercept` configuration option or the method attributes, you should recompile the AOP classes.
+> However, if you only modify the arguments of the method attributes, you do not need to recompile the AOP classes.
 
 Now, the methods annotated with the attribute will be intercepted by the interceptor.
 In this example, the `createUser` method of the `UserService` class will be intercepted by the
