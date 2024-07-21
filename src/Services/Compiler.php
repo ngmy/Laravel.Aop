@@ -51,12 +51,7 @@ final class Compiler
      */
     public function compile(): void
     {
-        $finder = new Finder();
-        $finder->files()->in($this->compiledPath->getPathname());
-
-        foreach ($finder as $file) {
-            File::delete($file->getPathname());
-        }
+        $this->cleanCompiledFiles();
 
         $sourceMap = SourceMap::empty();
         $aspectMap = $this->aspectMapFactory->fromInterceptMap($this->interceptMap);
@@ -72,9 +67,30 @@ final class Compiler
 
         $this->sourceMapFileManager->put($this->sourceMapFile, $sourceMap);
 
-        // Change the permission of the classes by the Ray compiler to 644 so that it can be read from the web server,
-        // because the Ray compiler creates the classes with the permission of 600
-        $finder->files()->name('*.php');
+        $this->changePermissionOfCompiledClasses();
+    }
+
+    /**
+     * Remove all compiled files.
+     */
+    private function cleanCompiledFiles(): void
+    {
+        $finder = (new Finder())->files()->in($this->compiledPath->getPathname());
+
+        foreach ($finder as $file) {
+            File::delete($file->getPathname());
+        }
+    }
+
+    /**
+     * Change the permission of the compiled classes.
+     *
+     * Change the permission of the classes by the Ray compiler to 644 so that it can be read from the web server,
+     * because the Ray compiler creates the classes with the permission of 600.
+     */
+    private function changePermissionOfCompiledClasses(): void
+    {
+        $finder = (new Finder())->files()->in($this->compiledPath->getPathname())->name('*.php');
 
         foreach ($finder as $file) {
             File::chmod($file->getPathname(), 0o644);
