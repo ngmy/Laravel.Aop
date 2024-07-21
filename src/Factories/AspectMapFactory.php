@@ -24,16 +24,23 @@ final class AspectMapFactory
     public function fromInterceptMap(InterceptMap $intercept): AspectMap
     {
         $pointcuts = $intercept
-            ->map(static fn (array $interceptorClassNames, string $attributeClassName): Pointcut => new Pointcut(
-                (new Matcher())->any(),
-                (new Matcher())->annotatedWith($attributeClassName),
-                array_map(static function (string $interceptorClassName): object {
-                    /** @var MethodInterceptor $interceptor */
-                    $interceptor = App::make($interceptorClassName);
+            ->reduce(static function (Collection $carry, array $interceptorClassNames, string $attributeClassName): Collection {
+                $pointcut = new Pointcut(
+                    (new Matcher())->any(),
+                    (new Matcher())->annotatedWith($attributeClassName),
+                    array_map(static function (string $interceptorClassName): object {
+                        /** @var MethodInterceptor $interceptor */
+                        $interceptor = App::make($interceptorClassName);
 
-                    return $interceptor;
-                }, $interceptorClassNames),
-            ))
+                        return $interceptor;
+                    }, $interceptorClassNames),
+                );
+
+                // @var Collection<class-string, Pointcut> $carry
+                $carry->put($attributeClassName, $pointcut);
+
+                return $carry;
+            }, collect())
         ;
 
         $aspectMap = AspectMap::empty();
