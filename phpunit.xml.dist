@@ -7,12 +7,12 @@
 >
     <testsuites>
         <testsuite name="All">
-            <directory suffix="Test.php">./tests</directory>
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
     <source>
         <include>
-            <directory suffix=".php">./src</directory>
+            <directory>./src</directory>
         </include>
     </source>
     <coverage>
