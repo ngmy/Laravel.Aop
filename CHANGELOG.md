@@ -1,5 +1,9 @@
 # Release Notes
 
+## [0.3.0](https://github.com/ngmy/Laravel.Aop/compare/0.2.0...0.3.0) - 2024-07-26
+
+- Leave exception throwing to Laravel.
+
 ## [0.2.0](https://github.com/ngmy/Laravel.Aop/compare/0.1.0...0.2.0) - 2024-07-22
 
 - Update to use only PHP 8 attributes.
