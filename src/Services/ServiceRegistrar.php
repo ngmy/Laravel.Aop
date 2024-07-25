@@ -36,10 +36,7 @@ final class ServiceRegistrar
                 $compiledClassName = $compiledClass->getClassName();
 
                 if (!class_exists($compiledClassName, false)) {
-                    $result = $this->classLoader->loadClass($compiledClassName);
-                    if (false === $result) {
-                        throw new \RuntimeException("Failed to load class: {$compiledClassName}");
-                    }
+                    $this->classLoader->loadClass($compiledClassName);
                 }
 
                 $instance = $app->make($compiledClassName, $params);

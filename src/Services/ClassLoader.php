@@ -24,16 +24,10 @@ final class ClassLoader
      *
      * @see \Ray\Aop\Weaver::loadClass()
      */
-    public function loadClass(string $className): bool
+    public function loadClass(string $className): void
     {
         $classPath = $this->compiledPath->getPathname().'/'.str_replace('\\', '_', $className).'.php';
 
-        if (file_exists($classPath)) {
-            require $classPath;
-
-            return true;
-        }
-
-        return false;
+        require $classPath;
     }
 }
