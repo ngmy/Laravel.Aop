@@ -12,11 +12,11 @@ class TestInterceptor2 implements MethodInterceptor
 {
     public function invoke(MethodInvocation $invocation): mixed
     {
-        Log::info(sprintf('Start %s', __CLASS__));
+        Log::info(\sprintf('Start %s', __CLASS__));
 
         $result = $invocation->proceed();
 
-        Log::info(sprintf('End %s', __CLASS__));
+        Log::info(\sprintf('End %s', __CLASS__));
 
         return $result;
     }
