@@ -55,23 +55,18 @@ final class AopTest extends TestCase
         $this->compiledPath = $compiledPath;
     }
 
-    protected function tearDown(): void
-    {
-        File::deleteDirectory($this->compiledPath);
-
-        parent::tearDown();
-    }
-
     /**
-     * @return iterable<array{class-string, string, string[]}> The weaving cases
+     * @return iterable<array{class-string, string, string[], bool, bool}> The AOP cases
      */
-    public static function provideWeavingCases(): iterable
+    public static function provideAopCases(): iterable
     {
         return [
             [
                 TestTarget1::class,
                 'method1',
                 [],
+                true,
+                false,
             ],
             [
                 TestTarget1::class,
@@ -80,6 +75,8 @@ final class AopTest extends TestCase
                     \sprintf('Start %s', TestInterceptor1::class),
                     \sprintf('End %s', TestInterceptor1::class),
                 ],
+                false,
+                false,
             ],
             [
                 TestTarget1::class,
@@ -88,6 +85,8 @@ final class AopTest extends TestCase
                     \sprintf('Start %s', TestInterceptor2::class),
                     \sprintf('End %s', TestInterceptor2::class),
                 ],
+                false,
+                false,
             ],
             [
                 TestTarget1::class,
@@ -98,6 +97,8 @@ final class AopTest extends TestCase
                     \sprintf('End %s', TestInterceptor2::class),
                     \sprintf('End %s', TestInterceptor1::class),
                 ],
+                false,
+                false,
             ],
             [
                 TestTarget1::class,
@@ -108,6 +109,8 @@ final class AopTest extends TestCase
                     \sprintf('End %s', TestInterceptor1::class),
                     \sprintf('End %s', TestInterceptor2::class),
                 ],
+                false,
+                false,
             ],
             [
                 TestTarget1::class,
@@ -118,6 +121,8 @@ final class AopTest extends TestCase
                     \sprintf('End %s', TestInterceptor2::class),
                     \sprintf('End %s', TestInterceptor1::class),
                 ],
+                false,
+                false,
             ],
             [
                 TestTarget1::class,
@@ -128,47 +133,87 @@ final class AopTest extends TestCase
                     \sprintf('End %s', TestInterceptor1::class),
                     \sprintf('End %s', TestInterceptor2::class),
                 ],
+                false,
+                true,
             ],
         ];
     }
 
     /**
-     * @dataProvider provideWeavingCases
+     * @dataProvider provideAopCases
+     *
+     * @runInSeparateProcess
+     *
+     * @preserveGlobalState enabled
      *
      * @param class-string $targetClassName  The class name of the target
      * @param string       $targetMethodName The method name of the target
      * @param string[]     $expectedLogs     The expected logs
+     * @param bool         $isFirst          Whether this is the first case
      */
-    public function testWeaving(
+    public function testAopWhenCompiledClassesAreLoaded(
         string $targetClassName,
         string $targetMethodName,
         array $expectedLogs,
+        bool $isFirst,
+        bool $_,
     ): void {
-        // Compile the AOP classes
-        /** @var PendingCommand $command */
-        $command = $this->artisan('aop:compile');
-        $command->run();
-        $command->assertSuccessful();
+        if ($isFirst) {
+            File::deleteDirectory($this->compiledPath);
 
-        // Bind the services to the container
-        $serviceRegistrar = $this->app->make(ServiceRegistrar::class);
-        $serviceRegistrar->bind();
-
-        // Create a spy logger
-        // NOTE: Create a spy logger because Log::spy() cannot check the order of logs
-        $spyLogger = $this->createSpyLogger();
-        Log::swap($spyLogger);
-
-        // Call the target method
-        $target = $this->app->make($targetClassName);
-        $target->{$targetMethodName}();
-
-        // Check that the logs are output as expected in terms of the number, order, and content
-        self::assertCount(\count($expectedLogs), $spyLogger->logCalls);
-
-        foreach ($expectedLogs as $i => $expectedLog) {
-            self::assertSame($expectedLog, $spyLogger->logCalls[$i]['arguments'][0]);
+            $this->assertCompileCommand();
         }
+
+        $this->assertAop($targetClassName, $targetMethodName, $expectedLogs);
+    }
+
+    /**
+     * @dataProvider provideAopCases
+     *
+     * @runInSeparateProcess
+     *
+     * @preserveGlobalState enabled
+     *
+     * @depends testAopWhenCompiledClassesAreLoaded
+     *
+     * @param class-string $targetClassName  The class name of the target
+     * @param string       $targetMethodName The method name of the target
+     * @param string[]     $expectedLogs     The expected logs
+     * @param bool         $isLast           Whether this is the last case
+     */
+    public function testAopWhenCompiledClassesAreNotLoaded(
+        string $targetClassName,
+        string $targetMethodName,
+        array $expectedLogs,
+        bool $_,
+        bool $isLast,
+    ): void {
+        self::assertDirectoryExists($this->compiledPath);
+
+        $this->assertAop($targetClassName, $targetMethodName, $expectedLogs);
+
+        if ($isLast) {
+            File::deleteDirectory($this->compiledPath);
+        }
+    }
+
+    /**
+     * @runInSeparateProcess
+     *
+     * @preserveGlobalState enabled
+     */
+    public function testCompileCommandWhenCompiledFilesExist(): void
+    {
+        File::deleteDirectory($this->compiledPath);
+
+        // Create dummy compiled files
+        File::makeDirectory($this->compiledPath, 0o755, true, true);
+        File::put($this->compiledPath.'/source_map.ser', '');
+        File::put($this->compiledPath.'/Ngmy_LaravelAop_Tests_Feature_stubs_Targets_TestTarget1_3064002867.php', '');
+
+        $this->assertCompileCommand();
+
+        File::deleteDirectory($this->compiledPath);
     }
 
     protected function resolveApplicationConfiguration($app): void
@@ -191,6 +236,47 @@ final class AopTest extends TestCase
                 TestInterceptor1::class,
             ],
         ]);
+    }
+
+    /**
+     * @param class-string $targetClassName  The class name of the target
+     * @param string       $targetMethodName The method name of the target
+     * @param string[]     $expectedLogs     The expected logs
+     */
+    private function assertAop(
+        string $targetClassName,
+        string $targetMethodName,
+        array $expectedLogs,
+    ): void {
+        // Bind the services to the container
+        $serviceRegistrar = $this->app->make(ServiceRegistrar::class);
+        $serviceRegistrar->bind();
+
+        // Create a spy logger
+        // NOTE: Create a spy logger because Log::spy() cannot check the order of logs
+        $spyLogger = $this->createSpyLogger();
+        Log::swap($spyLogger);
+
+        // Call the target method
+        $target = $this->app->make($targetClassName);
+        $target->{$targetMethodName}();
+
+        // Check that the logs are output as expected in terms of the number, order, and content
+        self::assertCount(\count($expectedLogs), $spyLogger->logCalls);
+
+        foreach ($expectedLogs as $i => $expectedLog) {
+            self::assertSame($expectedLog, $spyLogger->logCalls[$i]['arguments'][0]);
+        }
+    }
+
+    private function assertCompileCommand(): void
+    {
+        /** @var PendingCommand $command */
+        $command = $this->artisan('aop:compile');
+        $command->run();
+        $command->assertSuccessful();
+
+        self::assertDirectoryExists($this->compiledPath);
     }
 
     /**
