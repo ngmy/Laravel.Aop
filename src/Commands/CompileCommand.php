@@ -21,7 +21,7 @@ final class CompileCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Compile the AOP classes.';
+    protected $description = 'Compile the AOP classes';
 
     /**
      * Execute the console command.
