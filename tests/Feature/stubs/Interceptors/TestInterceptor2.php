@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Ray\Aop\MethodInterceptor;
 use Ray\Aop\MethodInvocation;
 
-class TestInterceptor2 implements MethodInterceptor
+final class TestInterceptor2 implements MethodInterceptor
 {
     public function invoke(MethodInvocation $invocation): mixed
     {
