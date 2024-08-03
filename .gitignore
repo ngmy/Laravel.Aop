@@ -20,3 +20,7 @@
 # PHP CS Fixer
 /.php-cs-fixer.php
 /.php-cs-fixer.cache
+
+# NPM
+/node_modules/
+/package-lock.json

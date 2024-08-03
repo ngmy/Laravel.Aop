@@ -5,11 +5,7 @@ declare(strict_types=1);
 namespace Ngmy\LaravelAop\Tests\Feature;
 
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Stringable;
 use Illuminate\Testing\PendingCommand;
 use Ngmy\LaravelAop\Services\ServiceRegistrar;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Attributes\TestAttribute1;
@@ -19,6 +15,7 @@ use Ngmy\LaravelAop\Tests\Feature\stubs\Attributes\TestAttribute4;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Interceptors\TestInterceptor1;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Interceptors\TestInterceptor2;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Targets\TestTarget1;
+use Ngmy\LaravelAop\Tests\utils\LogTestTrait;
 use Orchestra\Testbench\TestCase;
 
 /**
@@ -42,6 +39,8 @@ use Orchestra\Testbench\TestCase;
  */
 final class AopTest extends TestCase
 {
+    use LogTestTrait;
+
     protected $enablesPackageDiscoveries = true;
 
     private string $compiledPath;
@@ -252,23 +251,18 @@ final class AopTest extends TestCase
         $serviceRegistrar = $this->app->make(ServiceRegistrar::class);
         $serviceRegistrar->bind();
 
-        // Create a spy logger
-        // NOTE: Create a spy logger because Log::spy() cannot check the order of logs
-        $spyLogger = $this->createSpyLogger();
-        Log::swap($spyLogger);
+        $this->useSpyLogger();
 
         // Call the target method
         $target = $this->app->make($targetClassName);
         $target->{$targetMethodName}();
 
-        // Check that the logs are output as expected in terms of the number, order, and content
-        self::assertCount(\count($expectedLogs), $spyLogger->logCalls);
-
-        foreach ($expectedLogs as $i => $expectedLog) {
-            self::assertSame($expectedLog, $spyLogger->logCalls[$i]['arguments'][0]);
-        }
+        $this->assertLogCalls($expectedLogs);
     }
 
+    /**
+     * Assert the compile command.
+     */
     private function assertCompileCommand(): void
     {
         /** @var PendingCommand $command */
@@ -277,35 +271,5 @@ final class AopTest extends TestCase
         $command->assertSuccessful();
 
         self::assertDirectoryExists($this->compiledPath);
-    }
-
-    /**
-     * @return object{logCalls: array<array{method: string, arguments: array{0: Arrayable<array-key, mixed>|Jsonable|mixed[]|string|Stringable, 1: mixed[]}, timestamp: float}>} The spy logger
-     */
-    private function createSpyLogger(): object
-    {
-        $spyLogger = new class() {
-            /**
-             * The log calls.
-             *
-             * @var array<array{method: string, arguments: array{0: Arrayable<array-key, mixed>|Jsonable|mixed[]|string|Stringable, 1: mixed[]}, timestamp: float}>
-             */
-            public array $logCalls = [];
-
-            /**
-             * @param Arrayable<array-key, mixed>|Jsonable|mixed[]|string|Stringable $message The message
-             * @param mixed[]                                                        $context The context
-             */
-            public function info($message, array $context = []): void
-            {
-                $this->logCalls[] = [
-                    'method' => 'info',
-                    'arguments' => [$message, $context],
-                    'timestamp' => microtime(true),
-                ];
-            }
-        };
-
-        return $spyLogger;
     }
 }

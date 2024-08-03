@@ -33,4 +33,20 @@ return [
 
     'intercept' => [
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Watcher Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Here you may configure your watcher settings.
+    |
+    */
+
+    'watcher' => [
+        'paths' => [
+            app_path(),
+            config_path('aop.php'),
+        ],
+    ],
 ];

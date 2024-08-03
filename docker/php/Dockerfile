@@ -14,4 +14,9 @@ RUN apt-get update && apt-get install -y unzip
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
 
+# Add to test watcher.
+RUN apt-get update && apt-get install -y \
+    nodejs \
+    npm
+
 COPY --from=composer /usr/bin/composer /usr/bin/composer

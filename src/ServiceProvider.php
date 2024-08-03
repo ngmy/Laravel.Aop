@@ -8,7 +8,9 @@ use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Koriym\Attributes\AttributeReader;
 use Ngmy\LaravelAop\Collections\InterceptMap;
 use Ngmy\LaravelAop\Commands\CompileCommand;
+use Ngmy\LaravelAop\Commands\WatchCommand;
 use Ngmy\LaravelAop\Services\ServiceRegistrar;
+use Ngmy\LaravelAop\Services\Watcher;
 use Ngmy\LaravelAop\ValueObjects\CompiledPath;
 use Ray\ServiceLocator\ServiceLocator;
 
@@ -28,6 +30,11 @@ final class ServiceProvider extends BaseServiceProvider
             ->giveConfig('aop.intercept')
         ;
 
+        $this->app->when(Watcher::class)
+            ->needs('$paths')
+            ->giveConfig('aop.watcher.paths')
+        ;
+
         ServiceLocator::setReader(new AttributeReader());
 
         $registrar = $this->app->make(ServiceRegistrar::class);
@@ -43,6 +50,7 @@ final class ServiceProvider extends BaseServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 CompileCommand::class,
+                WatchCommand::class,
             ]);
         }
     }

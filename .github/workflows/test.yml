@@ -46,6 +46,9 @@ jobs:
             composer update --no-interaction orchestra/testbench:^9.0 --with-all-dependencies
           fi
 
+      - name: Install npm dependencies
+        run: npm install
+
       - name: Run tests
         run: |
           if [[ "${{ matrix.php }}" == '8.1' && "${{ matrix.laravel }}" == 10 ]]; then
