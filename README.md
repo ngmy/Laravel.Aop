@@ -145,6 +145,19 @@ In this example, the `createUser` method of the `UserService` class will be inte
 > dependency resolved from the service container. If the class instance is created directly, the methods are not
 > intercepted.
 
+## Watcher
+
+Laravel.Aop provides a watcher that watches the changes of the files and recompiles the AOP classes automatically.
+This is useful when you are developing the application.
+You may start the watcher using the `aop:watch` Artisan command:
+
+```bash
+php artisan aop:watch
+```
+
+You may configure the files to watch in the `watcher.paths` configuration option of the `config/aop.php` configuration
+file.
+
 ## Changelog
 
 Please see the [changelog](CHANGELOG.md).
