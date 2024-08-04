@@ -1,7 +1,7 @@
 services:
   app:
     build:
-      context: ./docker/php
+      context: ./docker/php81
       args:
         UID: ${APP_UID}
         GID: ${APP_GID}
@@ -9,3 +9,29 @@ services:
     volumes:
       - .:/var/www
     working_dir: /var/www
+
+  app-php82:
+    build:
+      context: ./docker/php82
+      args:
+        UID: ${APP_UID}
+        GID: ${APP_GID}
+    tty: true
+    volumes:
+      - .:/var/www
+    working_dir: /var/www
+    profiles:
+      - app-php82
+
+  app-php83:
+    build:
+      context: ./docker/php83
+      args:
+        UID: ${APP_UID}
+        GID: ${APP_GID}
+    tty: true
+    volumes:
+      - .:/var/www
+    working_dir: /var/www
+    profiles:
+      - app-php83
