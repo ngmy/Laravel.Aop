@@ -32,7 +32,11 @@ final class CompileCommand extends Command
      */
     public function handle(Compiler $compiler): int
     {
+        $this->components->info('Compiling the AOP classes...');
+
         $compiler->compile();
+
+        $this->components->info('Compiled the AOP classes.');
 
         return Command::SUCCESS;
     }
