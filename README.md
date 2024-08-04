@@ -147,7 +147,8 @@ In this example, the `createUser` method of the `UserService` class will be inte
 
 ## Watcher
 
-Laravel.Aop provides a watcher that watches the changes of the files and recompiles the AOP classes automatically.
+Laravel.Aop provides a watcher that watches the changes of the files and recompiles the AOP classes automatically via
+the `dump-autoload` Composer command.
 This is useful when you are developing the application.
 You may start the watcher using the `aop:watch` Artisan command:
 
