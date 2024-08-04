@@ -1,5 +1,10 @@
 # Release Notes
 
+## [0.5.0](https://github.com/ngmy/Laravel.Aop/compare/0.4.0...0.5.0) - 2024-08-05
+
+- Add messages to the compile command.
+- Fix messages when recompiling the AOP classes.
+
 ## [0.4.0](https://github.com/ngmy/Laravel.Aop/compare/0.3.0...0.4.0) - 2024-08-05
 
 - Add watcher.
