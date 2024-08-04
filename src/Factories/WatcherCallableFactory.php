@@ -87,11 +87,11 @@ final class WatcherCallableFactory
             }
 
             $this->viewFactory->info($this->getMessageForEvent($type, $path));
-            $this->viewFactory->info('Recompiling AOP classes...');
+            $this->viewFactory->info('Recompiling the AOP classes...');
 
             $this->composer->dumpAutoloads();
 
-            $this->viewFactory->info('Recompiled AOP classes.');
+            $this->viewFactory->info('Recompiled the AOP classes.');
 
             if (App::runningUnitTests()) {
                 match ($type) {
