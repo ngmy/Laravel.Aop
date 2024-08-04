@@ -39,11 +39,11 @@ jobs:
         run: |
           composer install --no-interaction
           if [[ "${{ matrix.laravel }}" == 9 ]]; then
-            composer update --no-interaction orchestra/testbench:^7.0 --with-all-dependencies
+            composer update --no-interaction --with-all-dependencies orchestra/testbench:^7.0 symfony/console:^6.0
           elif [[ "${{ matrix.laravel }}" == 10 ]]; then
-            composer update --no-interaction orchestra/testbench:^8.0 --with-all-dependencies
+            composer update --no-interaction --with-all-dependencies orchestra/testbench:^8.0 symfony/console:^6.0
           elif [[ "${{ matrix.laravel }}" == 11 ]]; then
-            composer update --no-interaction orchestra/testbench:^9.0 --with-all-dependencies
+            composer update --no-interaction --with-all-dependencies orchestra/testbench:^9.0 symfony/console:^7.0
           fi
 
       - name: Run lint
