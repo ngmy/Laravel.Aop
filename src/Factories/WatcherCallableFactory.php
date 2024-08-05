@@ -40,7 +40,7 @@ final class WatcherCallableFactory
     /**
      * Create a new instance.
      *
-     * @param Composer         $composer         The composer manager
+     * @param Composer         $composer         The Composer manager
      * @param ExceptionHandler $exceptionHandler The exception handler
      * @param Command          $command          The command
      * @param Factory          $viewFactory      The view factory

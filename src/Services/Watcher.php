@@ -17,7 +17,7 @@ final class Watcher
      * Create a new instance.
      *
      * @param string[]         $paths            The paths to watch
-     * @param Composer         $composer         The composer manager
+     * @param Composer         $composer         The Composer manager
      * @param ExceptionHandler $exceptionHandler The exception handler
      */
     public function __construct(
