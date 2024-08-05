@@ -118,8 +118,8 @@ php artisan aop:compile
 ```
 
 You must run the `dump-autoload` Composer command before running the `aop:compile` Artisan command.
-By default, the `aop:compile` Artisan command runs the `dump-autoload` Composer command internally before compiling
-the AOP classes.
+By default, the `aop:compile` Artisan command runs the `dump-autoload` Composer command with the `--no-scripts` option
+internally before compiling the AOP classes.
 If you want to run the `dump-autoload` Composer command yourself, you should run the `aop:compile` Artisan
 command with the `--no-dump-autoload` option:
 
@@ -156,7 +156,8 @@ php artisan aop:watch
 ```
 
 > [!NOTE]
-> The watcher runs the `dump-autoload` Composer command internally before recompiling the AOP classes.
+> The watcher runs the `dump-autoload` Composer command with the `--no-scripts` option internally before recompiling the
+> AOP classes.
 
 You may configure the files to watch in the `watcher.paths` configuration option of the `config/aop.php` configuration
 file.
