@@ -7,8 +7,8 @@ namespace Ngmy\LaravelAop\Factories;
 use Illuminate\Console\Command;
 use Illuminate\Console\View\Components\Factory;
 use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Support\Composer;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Spatie\Watcher\Watch;
@@ -40,13 +40,11 @@ final class WatcherCallableFactory
     /**
      * Create a new instance.
      *
-     * @param Composer         $composer         The Composer manager
      * @param ExceptionHandler $exceptionHandler The exception handler
      * @param Command          $command          The command
      * @param Factory          $viewFactory      The view factory
      */
     public function __construct(
-        private readonly Composer $composer,
         private readonly ExceptionHandler $exceptionHandler,
         private readonly Command $command,
         private readonly Factory $viewFactory,
@@ -87,11 +85,11 @@ final class WatcherCallableFactory
             }
 
             $this->viewFactory->info($this->getMessageForEvent($type, $path));
-            $this->viewFactory->info('Recompiling the AOP classes...');
+            $this->viewFactory->info('Running the dump-autoload Composer command and compiling the AOP classes...');
 
-            $this->composer->dumpAutoloads();
+            Artisan::call('aop:compile');
 
-            $this->viewFactory->info('Recompiled the AOP classes.');
+            $this->viewFactory->info('Ran the dump-autoload Composer command and compiled the AOP classes.');
 
             if (App::runningUnitTests()) {
                 match ($type) {

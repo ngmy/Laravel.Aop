@@ -31,21 +31,6 @@ will publish the `aop.php` configuration file to your application's `config` dir
 php artisan vendor:publish --provider="Ngmy\LaravelAop\ServiceProvider"
 ```
 
-Finally, you should add the `@php artisan aop:compile --ansi` script to the `post-autoload-dump` event hook of the
-`composer.json` file:
-
-```json
-{
-    "scripts": {
-        "post-autoload-dump": [
-            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi",
-            "@php artisan aop:compile --ansi"
-        ]
-    }
-}
-```
-
 ## Usage
 
 First, you should define the attribute.
@@ -126,11 +111,26 @@ class UserService
 }
 ```
 
-Finally, you should run the `dump-autoload` Composer command to compile the AOP classes:
+Finally, you should run the `aop:compile` Artisan command to compile the AOP classes:
+
+```bash
+php artisan aop:compile
+```
+
+You must run the `dump-autoload` Composer command before running the `aop:compile` Artisan command.
+By default, the `aop:compile` Artisan command runs the `dump-autoload` Composer command internally before compiling
+the AOP classes.
+If you want to run the `dump-autoload` Composer command yourself, you should run the `aop:compile` Artisan
+command with the `--no-dump-autoload` option:
 
 ```bash
 composer dump-autoload
+php artisan aop:compile --no-dump-autoload
 ```
+
+> [!WARNING]
+> If you want to avoid overwriting the Composer autoload files, such as when optimizing the Composer autoload files in
+> a production environment, you should run the `aop:compile` Artisan command with the `--no-dump-autoload` option.
 
 > [!IMPORTANT]
 > After modifying the `intercept` configuration option or the method attributes, you should recompile the AOP classes.
@@ -147,8 +147,7 @@ In this example, the `createUser` method of the `UserService` class will be inte
 
 ## Watcher
 
-Laravel.Aop provides a watcher that watches the changes of the files and recompiles the AOP classes automatically via
-the `dump-autoload` Composer command.
+Laravel.Aop provides a watcher that watches the changes of the files and recompiles the AOP classes automatically.
 This is useful when you are developing the application.
 You may start the watcher using the `aop:watch` Artisan command:
 
@@ -156,8 +155,31 @@ You may start the watcher using the `aop:watch` Artisan command:
 php artisan aop:watch
 ```
 
+> [!NOTE]
+> The watcher runs the `dump-autoload` Composer command internally before recompiling the AOP classes.
+
 You may configure the files to watch in the `watcher.paths` configuration option of the `config/aop.php` configuration
 file.
+
+## Tips
+
+### Auto compilation
+
+You may easily compile the AOP classes automatically after the `dump-autoload` Composer command is run by adding the
+`@php artisan aop:compile --no-dump-autoload --ansi` script to the `post-autoload-dump` event hook of the
+`composer.json` file:
+
+```json
+{
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi",
+            "@php artisan aop:compile --no-dump-autoload --ansi"
+        ]
+    }
+}
+```
 
 ## Changelog
 
