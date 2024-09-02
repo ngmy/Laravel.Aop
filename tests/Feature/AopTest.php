@@ -12,11 +12,14 @@ use Ngmy\LaravelAop\Tests\Feature\stubs\Attributes\TestAttribute1;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Attributes\TestAttribute2;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Attributes\TestAttribute3;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Attributes\TestAttribute4;
+use Ngmy\LaravelAop\Tests\Feature\stubs\Attributes\TestAttribute5;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Interceptors\TestInterceptor1;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Interceptors\TestInterceptor2;
+use Ngmy\LaravelAop\Tests\Feature\stubs\Interceptors\TestInterceptor3;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Targets\TestTarget1;
 use Ngmy\LaravelAop\Tests\utils\LogTestTrait;
 use Orchestra\Testbench\TestCase;
+use Psr\Log\LogLevel;
 
 /**
  * @internal
@@ -36,6 +39,8 @@ use Orchestra\Testbench\TestCase;
  * @covers \Ngmy\LaravelAop\ValueObjects\SourceMapFile
  *
  * @property Application $app
+ *
+ * @phpstan-type ExpectedLog list{LogLevel::*, string}
  */
 final class AopTest extends TestCase
 {
@@ -55,7 +60,7 @@ final class AopTest extends TestCase
     }
 
     /**
-     * @return iterable<array{class-string, string, string[], bool, bool}> The AOP cases
+     * @return iterable<array{class-string, string, list<ExpectedLog>, bool, bool}> The AOP cases
      */
     public static function provideAopCases(): iterable
     {
@@ -63,7 +68,9 @@ final class AopTest extends TestCase
             [
                 TestTarget1::class,
                 'method1',
-                [],
+                [
+                    [LogLevel::INFO, \sprintf('%s::%s', TestTarget1::class, 'method1')],
+                ],
                 true,
                 false,
             ],
@@ -71,8 +78,9 @@ final class AopTest extends TestCase
                 TestTarget1::class,
                 'method2',
                 [
-                    \sprintf('Start %s', TestInterceptor1::class),
-                    \sprintf('End %s', TestInterceptor1::class),
+                    [LogLevel::INFO, \sprintf('Start %s', TestInterceptor1::class)],
+                    [LogLevel::INFO, \sprintf('%s::%s', TestTarget1::class, 'method2')],
+                    [LogLevel::INFO, \sprintf('End %s', TestInterceptor1::class)],
                 ],
                 false,
                 false,
@@ -81,8 +89,9 @@ final class AopTest extends TestCase
                 TestTarget1::class,
                 'method3',
                 [
-                    \sprintf('Start %s', TestInterceptor2::class),
-                    \sprintf('End %s', TestInterceptor2::class),
+                    [LogLevel::INFO, \sprintf('Start %s', TestInterceptor2::class)],
+                    [LogLevel::INFO, \sprintf('%s::%s', TestTarget1::class, 'method3')],
+                    [LogLevel::INFO, \sprintf('End %s', TestInterceptor2::class)],
                 ],
                 false,
                 false,
@@ -91,10 +100,11 @@ final class AopTest extends TestCase
                 TestTarget1::class,
                 'method4',
                 [
-                    \sprintf('Start %s', TestInterceptor1::class),
-                    \sprintf('Start %s', TestInterceptor2::class),
-                    \sprintf('End %s', TestInterceptor2::class),
-                    \sprintf('End %s', TestInterceptor1::class),
+                    [LogLevel::INFO, \sprintf('Start %s', TestInterceptor1::class)],
+                    [LogLevel::INFO, \sprintf('Start %s', TestInterceptor2::class)],
+                    [LogLevel::INFO, \sprintf('%s::%s', TestTarget1::class, 'method4')],
+                    [LogLevel::INFO, \sprintf('End %s', TestInterceptor2::class)],
+                    [LogLevel::INFO, \sprintf('End %s', TestInterceptor1::class)],
                 ],
                 false,
                 false,
@@ -103,10 +113,11 @@ final class AopTest extends TestCase
                 TestTarget1::class,
                 'method5',
                 [
-                    \sprintf('Start %s', TestInterceptor2::class),
-                    \sprintf('Start %s', TestInterceptor1::class),
-                    \sprintf('End %s', TestInterceptor1::class),
-                    \sprintf('End %s', TestInterceptor2::class),
+                    [LogLevel::INFO, \sprintf('Start %s', TestInterceptor2::class)],
+                    [LogLevel::INFO, \sprintf('Start %s', TestInterceptor1::class)],
+                    [LogLevel::INFO, \sprintf('%s::%s', TestTarget1::class, 'method5')],
+                    [LogLevel::INFO, \sprintf('End %s', TestInterceptor1::class)],
+                    [LogLevel::INFO, \sprintf('End %s', TestInterceptor2::class)],
                 ],
                 false,
                 false,
@@ -115,10 +126,11 @@ final class AopTest extends TestCase
                 TestTarget1::class,
                 'method6',
                 [
-                    \sprintf('Start %s', TestInterceptor1::class),
-                    \sprintf('Start %s', TestInterceptor2::class),
-                    \sprintf('End %s', TestInterceptor2::class),
-                    \sprintf('End %s', TestInterceptor1::class),
+                    [LogLevel::INFO, \sprintf('Start %s', TestInterceptor1::class)],
+                    [LogLevel::INFO, \sprintf('Start %s', TestInterceptor2::class)],
+                    [LogLevel::INFO, \sprintf('%s::%s', TestTarget1::class, 'method6')],
+                    [LogLevel::INFO, \sprintf('End %s', TestInterceptor2::class)],
+                    [LogLevel::INFO, \sprintf('End %s', TestInterceptor1::class)],
                 ],
                 false,
                 false,
@@ -127,10 +139,26 @@ final class AopTest extends TestCase
                 TestTarget1::class,
                 'method7',
                 [
-                    \sprintf('Start %s', TestInterceptor2::class),
-                    \sprintf('Start %s', TestInterceptor1::class),
-                    \sprintf('End %s', TestInterceptor1::class),
-                    \sprintf('End %s', TestInterceptor2::class),
+                    [LogLevel::INFO, \sprintf('Start %s', TestInterceptor2::class)],
+                    [LogLevel::INFO, \sprintf('Start %s', TestInterceptor1::class)],
+                    [LogLevel::INFO, \sprintf('%s::%s', TestTarget1::class, 'method7')],
+                    [LogLevel::INFO, \sprintf('End %s', TestInterceptor1::class)],
+                    [LogLevel::INFO, \sprintf('End %s', TestInterceptor2::class)],
+                ],
+                false,
+                false,
+            ],
+            [
+                TestTarget1::class,
+                'method8',
+                [
+                    [LogLevel::INFO, \sprintf('Start %s', TestInterceptor3::class)],
+                    [LogLevel::NOTICE, \sprintf('Start %s', TestInterceptor3::class)],
+                    [LogLevel::WARNING, \sprintf('Start %s', TestInterceptor3::class)],
+                    [LogLevel::INFO, \sprintf('%s::%s', TestTarget1::class, 'method8')],
+                    [LogLevel::WARNING, \sprintf('End %s', TestInterceptor3::class)],
+                    [LogLevel::NOTICE, \sprintf('End %s', TestInterceptor3::class)],
+                    [LogLevel::INFO, \sprintf('End %s', TestInterceptor3::class)],
                 ],
                 false,
                 true,
@@ -145,10 +173,10 @@ final class AopTest extends TestCase
      *
      * @preserveGlobalState enabled
      *
-     * @param class-string $targetClassName  The class name of the target
-     * @param string       $targetMethodName The method name of the target
-     * @param string[]     $expectedLogs     The expected logs
-     * @param bool         $isFirst          Whether this is the first case
+     * @param class-string      $targetClassName  The class name of the target
+     * @param string            $targetMethodName The method name of the target
+     * @param list<ExpectedLog> $expectedLogs     The expected logs
+     * @param bool              $isFirst          Whether this is the first case
      */
     public function testAopWhenCompiledClassesAreLoaded(
         string $targetClassName,
@@ -175,10 +203,10 @@ final class AopTest extends TestCase
      *
      * @depends testAopWhenCompiledClassesAreLoaded
      *
-     * @param class-string $targetClassName  The class name of the target
-     * @param string       $targetMethodName The method name of the target
-     * @param string[]     $expectedLogs     The expected logs
-     * @param bool         $isLast           Whether this is the last case
+     * @param class-string      $targetClassName  The class name of the target
+     * @param string            $targetMethodName The method name of the target
+     * @param list<ExpectedLog> $expectedLogs     The expected logs
+     * @param bool              $isLast           Whether this is the last case
      */
     public function testAopWhenCompiledClassesAreNotLoaded(
         string $targetClassName,
@@ -234,13 +262,16 @@ final class AopTest extends TestCase
                 TestInterceptor2::class,
                 TestInterceptor1::class,
             ],
+            TestAttribute5::class => [
+                TestInterceptor3::class,
+            ],
         ]);
     }
 
     /**
-     * @param class-string $targetClassName  The class name of the target
-     * @param string       $targetMethodName The method name of the target
-     * @param string[]     $expectedLogs     The expected logs
+     * @param class-string      $targetClassName  The class name of the target
+     * @param string            $targetMethodName The method name of the target
+     * @param list<ExpectedLog> $expectedLogs     The expected logs
      */
     private function assertAop(
         string $targetClassName,

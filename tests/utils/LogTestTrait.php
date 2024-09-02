@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace Ngmy\LaravelAop\Tests\utils;
 
 use Illuminate\Support\Facades\Log;
+use Psr\Log\LogLevel;
 
+/**
+ * @phpstan-type ExpectedLog list{LogLevel::*, string}
+ */
 trait LogTestTrait
 {
     /**
@@ -47,25 +51,27 @@ trait LogTestTrait
     /**
      * Assert that the log call order and message are as expected.
      *
-     * @param int    $order           The log call order
-     * @param string $expectedMessage The expected log message
+     * @param int         $order              The log call order
+     * @param LogLevel::* $expectedLogLevel   The expected log level
+     * @param string      $expectedLogMessage The expected log message
      */
-    private function assertLogCall(int $order, string $expectedMessage): void
+    private function assertLogCall(int $order, string $expectedLogLevel, string $expectedLogMessage): void
     {
-        self::assertSame($expectedMessage, $this->spyLogger->logCalls[$order]['message']);
+        self::assertSame($expectedLogLevel, $this->spyLogger->logCalls[$order]['level']);
+        self::assertSame($expectedLogMessage, $this->spyLogger->logCalls[$order]['message']);
     }
 
     /**
      * Assert that the log calls count, order, and messages are as expected.
      *
-     * @param string[] $expectedMessages The expected log messages
+     * @param list<ExpectedLog> $expectedLogs The expected logs
      */
-    private function assertLogCalls(array $expectedMessages): void
+    private function assertLogCalls(array $expectedLogs): void
     {
-        $this->assertLogCallsCount(\count($expectedMessages));
+        $this->assertLogCallsCount(\count($expectedLogs));
 
-        foreach ($expectedMessages as $order => $expectedMessage) {
-            $this->assertLogCall($order, $expectedMessage);
+        foreach ($expectedLogs as $order => $expectedLog) {
+            $this->assertLogCall($order, $expectedLog[0], $expectedLog[1]);
         }
     }
 }

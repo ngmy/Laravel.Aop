@@ -40,6 +40,38 @@ final class SpyLogger
     }
 
     /**
+     * Spy on the warning method.
+     *
+     * @param Message $message The message
+     * @param Context $context The context
+     */
+    public function warning($message, array $context = []): void
+    {
+        $this->logCalls[] = [
+            'level' => 'warning',
+            'message' => $message,
+            'context' => $context,
+            'timestamp' => microtime(true),
+        ];
+    }
+
+    /**
+     * Spy on the notice method.
+     *
+     * @param Message $message The message
+     * @param Context $context The context
+     */
+    public function notice($message, array $context = []): void
+    {
+        $this->logCalls[] = [
+            'level' => 'notice',
+            'message' => $message,
+            'context' => $context,
+            'timestamp' => microtime(true),
+        ];
+    }
+
+    /**
      * Spy on the info method.
      *
      * @param Message $message The message

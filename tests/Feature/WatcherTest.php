@@ -7,6 +7,7 @@ namespace Ngmy\LaravelAop\Tests\Feature;
 use Illuminate\Testing\PendingCommand;
 use Ngmy\LaravelAop\Tests\utils\LogTestTrait;
 use Orchestra\Testbench\TestCase;
+use Psr\Log\LogLevel;
 
 /**
  * @internal
@@ -36,10 +37,10 @@ final class WatcherTest extends TestCase
         $path = app_path('test.php');
 
         self::assertLogCalls([
-            \sprintf($format, 'File created', $path),
-            \sprintf($format, 'File updated', $path),
-            'Test exception',
-            \sprintf($format, 'File deleted', $path),
+            [LogLevel::INFO, \sprintf($format, 'File created', $path)],
+            [LogLevel::INFO, \sprintf($format, 'File updated', $path)],
+            [LogLevel::ERROR, 'Test exception'],
+            [LogLevel::INFO, \sprintf($format, 'File deleted', $path)],
         ]);
     }
 }
