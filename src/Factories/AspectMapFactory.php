@@ -36,8 +36,8 @@ final class AspectMapFactory
                     }, $interceptorClassNames),
                 );
 
-                // @var Collection<class-string, Pointcut> $carry
-                $carry->put($attributeClassName, $pointcut);
+                /** @var Collection<class-string, Pointcut> $carry */
+                $carry = $carry->put($attributeClassName, $pointcut);
 
                 return $carry;
             }, collect())

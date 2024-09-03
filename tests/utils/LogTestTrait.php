@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Psr\Log\LogLevel;
 
 /**
- * @phpstan-type ExpectedLog list{LogLevel::*, string}
+ * @phpstan-type ExpectedLogs list<list{LogLevel::*, string}>
  */
 trait LogTestTrait
 {
@@ -64,7 +64,7 @@ trait LogTestTrait
     /**
      * Assert that the log calls count, order, and messages are as expected.
      *
-     * @param list<ExpectedLog> $expectedLogs The expected logs
+     * @param ExpectedLogs $expectedLogs The expected logs
      */
     private function assertLogCalls(array $expectedLogs): void
     {

@@ -6,13 +6,16 @@ namespace Ngmy\LaravelAop\ValueObjects;
 
 use Ray\Aop\MethodInterceptor;
 
+/**
+ * @phpstan-type Bindings array<string, list<(MethodInterceptor|string)>>
+ */
 final class CompiledClass
 {
     /**
      * Create a new instance.
      *
-     * @param class-string                                $className The class name
-     * @param array<string, (MethodInterceptor|string)[]> $bindings  The bindings
+     * @param class-string $className The class name
+     * @param Bindings     $bindings  The bindings
      */
     public function __construct(
         private readonly string $className,
@@ -32,7 +35,7 @@ final class CompiledClass
     /**
      * Get the bindings.
      *
-     * @return array<string, (MethodInterceptor|string)[]> The bindings
+     * @return Bindings The bindings
      */
     public function getBindings(): array
     {

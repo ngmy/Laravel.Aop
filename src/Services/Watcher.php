@@ -15,7 +15,7 @@ final class Watcher
     /**
      * Create a new instance.
      *
-     * @param string[]         $paths            The paths to watch
+     * @param list<string>     $paths            The paths to watch
      * @param ExceptionHandler $exceptionHandler The exception handler
      */
     public function __construct(

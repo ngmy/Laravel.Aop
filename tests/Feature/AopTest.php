@@ -40,7 +40,7 @@ use Psr\Log\LogLevel;
  *
  * @property Application $app
  *
- * @phpstan-type ExpectedLog list{LogLevel::*, string}
+ * @phpstan-type ExpectedLogs list<list{LogLevel::*, string}>
  */
 final class AopTest extends TestCase
 {
@@ -60,7 +60,7 @@ final class AopTest extends TestCase
     }
 
     /**
-     * @return iterable<array{class-string, string, list<ExpectedLog>, bool, bool}> The AOP cases
+     * @return iterable<list{class-string, string, ExpectedLogs, bool, bool}> The AOP cases
      */
     public static function provideAopCases(): iterable
     {
@@ -173,10 +173,10 @@ final class AopTest extends TestCase
      *
      * @preserveGlobalState enabled
      *
-     * @param class-string      $targetClassName  The class name of the target
-     * @param string            $targetMethodName The method name of the target
-     * @param list<ExpectedLog> $expectedLogs     The expected logs
-     * @param bool              $isFirst          Whether this is the first case
+     * @param class-string $targetClassName  The class name of the target
+     * @param string       $targetMethodName The method name of the target
+     * @param ExpectedLogs $expectedLogs     The expected logs
+     * @param bool         $isFirst          Whether this is the first case
      */
     public function testAopWhenCompiledClassesAreLoaded(
         string $targetClassName,
@@ -203,10 +203,10 @@ final class AopTest extends TestCase
      *
      * @depends testAopWhenCompiledClassesAreLoaded
      *
-     * @param class-string      $targetClassName  The class name of the target
-     * @param string            $targetMethodName The method name of the target
-     * @param list<ExpectedLog> $expectedLogs     The expected logs
-     * @param bool              $isLast           Whether this is the last case
+     * @param class-string $targetClassName  The class name of the target
+     * @param string       $targetMethodName The method name of the target
+     * @param ExpectedLogs $expectedLogs     The expected logs
+     * @param bool         $isLast           Whether this is the last case
      */
     public function testAopWhenCompiledClassesAreNotLoaded(
         string $targetClassName,
@@ -269,9 +269,9 @@ final class AopTest extends TestCase
     }
 
     /**
-     * @param class-string      $targetClassName  The class name of the target
-     * @param string            $targetMethodName The method name of the target
-     * @param list<ExpectedLog> $expectedLogs     The expected logs
+     * @param class-string $targetClassName  The class name of the target
+     * @param string       $targetMethodName The method name of the target
+     * @param ExpectedLogs $expectedLogs     The expected logs
      */
     private function assertAop(
         string $targetClassName,
