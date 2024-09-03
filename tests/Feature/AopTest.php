@@ -60,12 +60,12 @@ final class AopTest extends TestCase
     }
 
     /**
-     * @return iterable<list{class-string, string, ExpectedLogs, bool, bool}> The AOP cases
+     * @return iterable<string, list{class-string, string, ExpectedLogs, bool, bool}> The AOP cases
      */
     public static function provideAopCases(): iterable
     {
         return [
-            [
+            'no attribute' => [
                 TestTarget1::class,
                 'method1',
                 [
@@ -74,7 +74,7 @@ final class AopTest extends TestCase
                 true,
                 false,
             ],
-            [
+            'TestAttribute1 -> TestInterceptor1' => [
                 TestTarget1::class,
                 'method2',
                 [
@@ -85,7 +85,7 @@ final class AopTest extends TestCase
                 false,
                 false,
             ],
-            [
+            'TestAttribute2 -> TestInterceptor2' => [
                 TestTarget1::class,
                 'method3',
                 [
@@ -96,7 +96,7 @@ final class AopTest extends TestCase
                 false,
                 false,
             ],
-            [
+            'TestAttribute1 -> TestInterceptor1, TestAttribute2 -> TestInterceptor2' => [
                 TestTarget1::class,
                 'method4',
                 [
@@ -109,7 +109,7 @@ final class AopTest extends TestCase
                 false,
                 false,
             ],
-            [
+            'TestAttribute2 -> TestInterceptor2, TestAttribute1 -> TestInterceptor1' => [
                 TestTarget1::class,
                 'method5',
                 [
@@ -122,7 +122,7 @@ final class AopTest extends TestCase
                 false,
                 false,
             ],
-            [
+            'TestAttribute3 -> (TestInterceptor1, TestInterceptor2)' => [
                 TestTarget1::class,
                 'method6',
                 [
@@ -135,7 +135,7 @@ final class AopTest extends TestCase
                 false,
                 false,
             ],
-            [
+            'TestAttribute4 -> (TestInterceptor2, TestInterceptor1)' => [
                 TestTarget1::class,
                 'method7',
                 [
@@ -148,7 +148,7 @@ final class AopTest extends TestCase
                 false,
                 false,
             ],
-            [
+            'repeatable attribute with arguments' => [
                 TestTarget1::class,
                 'method8',
                 [
