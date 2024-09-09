@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Ngmy\LaravelAop\Tests\Feature;
 
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\File;
 use Illuminate\Testing\PendingCommand;
 use Ngmy\LaravelAop\Services\ServiceRegistrar;
@@ -17,8 +16,8 @@ use Ngmy\LaravelAop\Tests\Feature\stubs\Interceptors\TestInterceptor1;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Interceptors\TestInterceptor2;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Interceptors\TestInterceptor3;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Targets\TestTarget1;
-use Ngmy\LaravelAop\Tests\utils\LogTestTrait;
-use Orchestra\Testbench\TestCase;
+use Ngmy\LaravelAop\Tests\TestCase;
+use Ngmy\LaravelAop\Tests\utils\SpyLogger;
 use Psr\Log\LogLevel;
 
 /**
@@ -38,15 +37,11 @@ use Psr\Log\LogLevel;
  * @covers \Ngmy\LaravelAop\ValueObjects\CompiledPath
  * @covers \Ngmy\LaravelAop\ValueObjects\SourceMapFile
  *
- * @property Application $app
- *
  * @phpstan-type ExpectedLogs list<list{LogLevel::*, string}>
  */
 final class AopTest extends TestCase
 {
-    use LogTestTrait;
-
-    protected $enablesPackageDiscoveries = true;
+    protected bool $compileAopClasses = false;
 
     private string $compiledPath;
 
@@ -169,10 +164,6 @@ final class AopTest extends TestCase
     /**
      * @dataProvider provideAopCases
      *
-     * @runInSeparateProcess
-     *
-     * @preserveGlobalState enabled
-     *
      * @param class-string $targetClassName  The class name of the target
      * @param string       $targetMethodName The method name of the target
      * @param ExpectedLogs $expectedLogs     The expected logs
@@ -195,11 +186,13 @@ final class AopTest extends TestCase
     }
 
     /**
+     * This test is run in a separate process to test when compiled AOP classes are not loaded.
+     *
      * @dataProvider provideAopCases
      *
      * @runInSeparateProcess
      *
-     * @preserveGlobalState enabled
+     * @preserveGlobalState disabled
      *
      * @depends testAopWhenCompiledClassesAreLoaded
      *
@@ -224,11 +217,6 @@ final class AopTest extends TestCase
         }
     }
 
-    /**
-     * @runInSeparateProcess
-     *
-     * @preserveGlobalState enabled
-     */
     public function testCompileCommandWhenCompiledFilesExist(): void
     {
         File::deleteDirectory($this->compiledPath);
@@ -282,13 +270,14 @@ final class AopTest extends TestCase
         $serviceRegistrar = $this->app->make(ServiceRegistrar::class);
         $serviceRegistrar->bind();
 
-        $this->useSpyLogger();
+        $spyLogger = (new SpyLogger())->use();
 
         // Call the target method
+
         $target = $this->app->make($targetClassName);
         $target->{$targetMethodName}();
 
-        $this->assertLogCalls($expectedLogs);
+        self::assertLogCalls($expectedLogs, $spyLogger);
     }
 
     /**

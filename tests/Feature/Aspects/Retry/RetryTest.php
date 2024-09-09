@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Ngmy\LaravelAop\Tests\Feature\Aspects\Retry;
 
 use Ngmy\LaravelAop\Collections\InterceptMap;
-use Ngmy\LaravelAop\Tests\Feature\Aspects\AspectTestCase;
 use Ngmy\LaravelAop\Tests\Feature\Aspects\Retry\stubs\Attributes\TestAttribute1;
 use Ngmy\LaravelAop\Tests\Feature\Aspects\Retry\stubs\Interceptors\TestInterceptor1;
 use Ngmy\LaravelAop\Tests\Feature\Aspects\Retry\stubs\Targets\TestTarget1;
-use Ngmy\LaravelAop\Tests\utils\LogTestTrait;
+use Ngmy\LaravelAop\Tests\TestCase;
+use Ngmy\LaravelAop\Tests\utils\SpyLogger;
 use Psr\Log\LogLevel;
 
 /**
@@ -20,10 +20,8 @@ use Psr\Log\LogLevel;
  *
  * @phpstan-type ExpectedLogs list<list{LogLevel::*, string}>
  */
-final class RetryTest extends AspectTestCase
+final class RetryTest extends TestCase
 {
-    use LogTestTrait;
-
     /**
      * @return iterable<string, list{class-string, string, ExpectedLogs}> The cache cases
      */
@@ -115,10 +113,6 @@ final class RetryTest extends AspectTestCase
     /**
      * @dataProvider provideRetryCases
      *
-     * @runInSeparateProcess
-     *
-     * @preserveGlobalState enabled
-     *
      * @param class-string                  $targetClassName    The class name of the target
      * @param string                        $targetMethodName   The method name of the target
      * @param ExpectedLogs                  $expectedLogs       The expected logs
@@ -132,7 +126,7 @@ final class RetryTest extends AspectTestCase
     ): void {
         $target = $this->app->make($targetClassName);
 
-        $this->useSpyLogger();
+        $spyLogger = (new SpyLogger())->use();
 
         try {
             $target->{$targetMethodName}();
@@ -142,7 +136,7 @@ final class RetryTest extends AspectTestCase
             }
             self::assertInstanceOf($exceptionClassName, $e);
         } finally {
-            $this->assertLogCalls($expectedLogs);
+            self::assertLogCalls($expectedLogs, $spyLogger);
         }
     }
 

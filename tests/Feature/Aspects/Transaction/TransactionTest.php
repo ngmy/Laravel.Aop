@@ -6,8 +6,8 @@ namespace Ngmy\LaravelAop\Tests\Feature\Aspects\Transaction;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Ngmy\LaravelAop\Tests\Feature\Aspects\AspectTestCase;
 use Ngmy\LaravelAop\Tests\Feature\Aspects\Transaction\stubs\Targets\TestTarget1;
+use Ngmy\LaravelAop\Tests\TestCase;
 
 /**
  * @internal
@@ -15,7 +15,7 @@ use Ngmy\LaravelAop\Tests\Feature\Aspects\Transaction\stubs\Targets\TestTarget1;
  * @covers \Ngmy\LaravelAop\Aspects\Transaction\Attributes\Transactional
  * @covers \Ngmy\LaravelAop\Aspects\Transaction\Interceptors\TransactionalInterceptor
  */
-final class TransactionTest extends AspectTestCase
+final class TransactionTest extends TestCase
 {
     /**
      * The database connections.

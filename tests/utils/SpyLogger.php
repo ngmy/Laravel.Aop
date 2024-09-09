@@ -6,6 +6,7 @@ namespace Ngmy\LaravelAop\Tests\utils;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Stringable;
 
 /**
@@ -21,6 +22,19 @@ final class SpyLogger
      * @var array<array{level: Level, message: Message, context: Context, timestamp: float}>
      */
     public array $logCalls = [];
+
+    /**
+     * Use the spy logger.
+     *
+     * @return $this The spy logger
+     */
+    public function use(): self
+    {
+        // Log::spy() cannot be used in the test of the order of logs, so use a custom spy logger
+        Log::swap($this);
+
+        return $this;
+    }
 
     /**
      * Spy on the log method.

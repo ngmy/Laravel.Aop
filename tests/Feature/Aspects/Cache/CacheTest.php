@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Ngmy\LaravelAop\Tests\Feature\Aspects\Cache;
 
-use Ngmy\LaravelAop\Tests\Feature\Aspects\AspectTestCase;
 use Ngmy\LaravelAop\Tests\Feature\Aspects\Cache\stubs\Targets\TestTarget1;
+use Ngmy\LaravelAop\Tests\TestCase;
 
 /**
  * @internal
@@ -17,7 +17,7 @@ use Ngmy\LaravelAop\Tests\Feature\Aspects\Cache\stubs\Targets\TestTarget1;
  * @covers \Ngmy\LaravelAop\Aspects\Cache\Interceptors\FlushAfterInterceptor
  * @covers \Ngmy\LaravelAop\Aspects\Cache\Interceptors\FlushBeforeInterceptor
  */
-final class CacheTest extends AspectTestCase
+final class CacheTest extends TestCase
 {
     private TestTarget1 $target;
 
@@ -28,11 +28,6 @@ final class CacheTest extends AspectTestCase
         $this->target = $this->app->make(TestTarget1::class);
     }
 
-    /**
-     * @runInSeparateProcess
-     *
-     * @preserveGlobalState enabled
-     */
     public function testCache(): void
     {
         $this->target->set('1');

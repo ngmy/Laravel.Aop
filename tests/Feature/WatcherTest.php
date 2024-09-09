@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Ngmy\LaravelAop\Tests\Feature;
 
 use Illuminate\Testing\PendingCommand;
-use Ngmy\LaravelAop\Tests\utils\LogTestTrait;
-use Orchestra\Testbench\TestCase;
+use Ngmy\LaravelAop\Tests\TestCase;
+use Ngmy\LaravelAop\Tests\utils\SpyLogger;
 use Psr\Log\LogLevel;
 
 /**
@@ -19,13 +19,11 @@ use Psr\Log\LogLevel;
  */
 final class WatcherTest extends TestCase
 {
-    use LogTestTrait;
-
-    protected $enablesPackageDiscoveries = true;
+    protected bool $compileAopClasses = false;
 
     public function testWatchCommand(): void
     {
-        self::useSpyLogger();
+        $spyLogger = (new SpyLogger())->use();
 
         /** @var PendingCommand $command */
         $command = $this->artisan('aop:watch');
@@ -41,6 +39,6 @@ final class WatcherTest extends TestCase
             [LogLevel::INFO, \sprintf($format, 'File updated', $path)],
             [LogLevel::ERROR, 'Test exception'],
             [LogLevel::INFO, \sprintf($format, 'File deleted', $path)],
-        ]);
+        ], $spyLogger);
     }
 }
