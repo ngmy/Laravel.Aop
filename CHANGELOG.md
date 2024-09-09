@@ -1,5 +1,9 @@
 # Release Notes
 
+## [0.7.0](https://github.com/ngmy/Laravel.Aop/compare/0.6.0...0.7.0) - 2024-09-09
+
+- Add built-in attributes.
+
 ## [0.6.0](https://github.com/ngmy/Laravel.Aop/compare/0.5.0...0.6.0) - 2024-08-05
 
 - Update the compile command to run the `dump-autoload` Composer command.
