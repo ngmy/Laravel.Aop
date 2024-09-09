@@ -80,12 +80,13 @@ For example, let's register the `Transactional` attribute and the `Transactional
 ```php
 use App\Attributes\Transactional;
 use App\Interceptors\TransactionalInterceptor;
+use Ngmy\LaravelAop\Collections\InterceptMap;
 
-'intercept' => [
+'intercept' => InterceptMap::default()->merge([
     Transactional::class => [
         TransactionalInterceptor::class,
     ],
-],
+])->toArray(),
 ```
 
 Then, you should annotate the methods that you want to intercept with the attribute.
@@ -181,6 +182,12 @@ You may easily compile the AOP classes automatically after the `dump-autoload` C
     }
 }
 ```
+
+## Built-in attributes
+
+- [Cache](https://ngmy.github.io/Laravel.Aop/namespaces/ngmy-laravelaop-aspects-cache-attributes.html)
+- [Transaction](https://ngmy.github.io/Laravel.Aop/namespaces/ngmy-laravelaop-aspects-transaction-attributes.html)
+- [Retry](https://ngmy.github.io/Laravel.Aop/namespaces/ngmy-laravelaop-aspects-retry-attributes.html)
 
 ## Changelog
 

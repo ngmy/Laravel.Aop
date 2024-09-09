@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Ngmy\LaravelAop\Collections\InterceptMap;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -31,8 +33,8 @@ return [
     |
     */
 
-    'intercept' => [
-    ],
+    'intercept' => InterceptMap::default()->merge([
+    ])->toArray(),
 
     /*
     |--------------------------------------------------------------------------
@@ -47,6 +49,21 @@ return [
         'paths' => [
             app_path(),
             config_path('aop.php'),
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Transaction Aspect Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Here you may configure your transaction aspect settings.
+    |
+    */
+
+    'transaction' => [
+        'rollback_for' => [
+            Throwable::class,
         ],
     ],
 ];
