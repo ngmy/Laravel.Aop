@@ -1,5 +1,9 @@
 # Release Notes
 
+## [0.8.0](https://github.com/ngmy/Laravel.Aop/compare/0.7.0...0.8.0) - 2024-09-16
+
+- Add the `ExceptionLogLevel` attribute.
+
 ## [0.7.0](https://github.com/ngmy/Laravel.Aop/compare/0.6.0...0.7.0) - 2024-09-09
 
 - Add built-in attributes.
