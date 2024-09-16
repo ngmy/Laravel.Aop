@@ -96,6 +96,46 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Ngmy-LaravelAop-Aspects-Cache-Interceptors-FlushBeforeInterceptor.html#method_invoke"
         },                {
+            "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Logging\\Attributes\\ExceptionLogLevel",
+            "name": "ExceptionLogLevel",
+            "summary": "The\u0020ExceptionLogLevel\u0020attribute.",
+            "url": "classes/Ngmy-LaravelAop-Aspects-Logging-Attributes-ExceptionLogLevel.html"
+        },                {
+            "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Logging\\Attributes\\ExceptionLogLevel\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Create\u0020a\u0020new\u0020instance.",
+            "url": "classes/Ngmy-LaravelAop-Aspects-Logging-Attributes-ExceptionLogLevel.html#method___construct"
+        },                {
+            "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Logging\\Attributes\\ExceptionLogLevel\u003A\u003A\u0024type",
+            "name": "type",
+            "summary": "",
+            "url": "classes/Ngmy-LaravelAop-Aspects-Logging-Attributes-ExceptionLogLevel.html#property_type"
+        },                {
+            "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Logging\\Attributes\\ExceptionLogLevel\u003A\u003A\u0024level",
+            "name": "level",
+            "summary": "",
+            "url": "classes/Ngmy-LaravelAop-Aspects-Logging-Attributes-ExceptionLogLevel.html#property_level"
+        },                {
+            "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Logging\\Interceptors\\ExceptionLogLevelInterceptor",
+            "name": "ExceptionLogLevelInterceptor",
+            "summary": "",
+            "url": "classes/Ngmy-LaravelAop-Aspects-Logging-Interceptors-ExceptionLogLevelInterceptor.html"
+        },                {
+            "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Logging\\Interceptors\\ExceptionLogLevelInterceptor\u003A\u003Ainvoke\u0028\u0029",
+            "name": "invoke",
+            "summary": "",
+            "url": "classes/Ngmy-LaravelAop-Aspects-Logging-Interceptors-ExceptionLogLevelInterceptor.html#method_invoke"
+        },                {
+            "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Logging\\Interceptors\\ExceptionLogLevelInterceptor\u003A\u003AexecuteAndSetExceptionLogLevel\u0028\u0029",
+            "name": "executeAndSetExceptionLogLevel",
+            "summary": "Execute\u0020the\u0020callback\u0020and\u0020set\u0020the\u0020log\u0020level.",
+            "url": "classes/Ngmy-LaravelAop-Aspects-Logging-Interceptors-ExceptionLogLevelInterceptor.html#method_executeAndSetExceptionLogLevel"
+        },                {
+            "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Logging\\Interceptors\\ExceptionLogLevelInterceptor\u003A\u003AgetExceptionHandler\u0028\u0029",
+            "name": "getExceptionHandler",
+            "summary": "Get\u0020the\u0020exception\u0020handler.",
+            "url": "classes/Ngmy-LaravelAop-Aspects-Logging-Interceptors-ExceptionLogLevelInterceptor.html#method_getExceptionHandler"
+        },                {
             "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Retry\\Attributes\\RetryOnFailure",
             "name": "RetryOnFailure",
             "summary": "The\u0020RetryOnFailure\u0020attribute.",
@@ -575,6 +615,21 @@ Search.appendIndex(
             "name": "Interceptors",
             "summary": "",
             "url": "namespaces/ngmy-laravelaop-aspects-cache-interceptors.html"
+        },                {
+            "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Logging\\Attributes",
+            "name": "Attributes",
+            "summary": "",
+            "url": "namespaces/ngmy-laravelaop-aspects-logging-attributes.html"
+        },                {
+            "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Logging",
+            "name": "Logging",
+            "summary": "",
+            "url": "namespaces/ngmy-laravelaop-aspects-logging.html"
+        },                {
+            "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Logging\\Interceptors",
+            "name": "Interceptors",
+            "summary": "",
+            "url": "namespaces/ngmy-laravelaop-aspects-logging-interceptors.html"
         },                {
             "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Retry\\Attributes",
             "name": "Attributes",

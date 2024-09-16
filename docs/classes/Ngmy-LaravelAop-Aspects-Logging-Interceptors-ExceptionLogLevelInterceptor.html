@@ -93,16 +93,15 @@
                                         <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/ngmy.html">Ngmy</a></li>
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/ngmy-laravelaop.html">LaravelAop</a></li>
-            <li class="phpdocumentor-breadcrumb"><a href="namespaces/ngmy-laravelaop-collections.html">Collections</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/ngmy-laravelaop-aspects.html">Aspects</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/ngmy-laravelaop-aspects-logging.html">Logging</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/ngmy-laravelaop-aspects-logging-interceptors.html">Interceptors</a></li>
     </ul>
 
     <article class="phpdocumentor-element -class">
         <h2 class="phpdocumentor-content__title">
-    InterceptMap
+    ExceptionLogLevelInterceptor
 
-        <span class="phpdocumentor-element__extends">
-        extends <abbr title="\Illuminate\Support\Collection">Collection</abbr>
-    </span>
     
             <div class="phpdocumentor-element__package">
             in package
@@ -111,6 +110,9 @@
                             </ul>
         </div>
     
+            <span class="phpdocumentor-element__implements">
+            implements
+                            <abbr title="\Ray\Aop\MethodInterceptor">MethodInterceptor</abbr>                    </span>
     
     </h2>
 
@@ -122,9 +124,9 @@
 </div>
 
         <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Collections/InterceptMap.php"><a href="files/src-collections-interceptmap.html"><abbr title="src/Collections/InterceptMap.php">InterceptMap.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Aspects/Logging/Interceptors/ExceptionLogLevelInterceptor.php"><a href="files/src-aspects-logging-interceptors-exceptionloglevelinterceptor.html"><abbr title="src/Aspects/Logging/Interceptors/ExceptionLogLevelInterceptor.php">ExceptionLogLevelInterceptor.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">25</span>
+    <span class="phpdocumentor-element-found-in__line">15</span>
 
     </aside>
 
@@ -132,22 +134,6 @@
 
 
 
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
-        Tags
-        <a href="classes/Ngmy-LaravelAop-Collections-InterceptMap.html#tags" class="headerlink"><i class="fas fa-link"></i></a>
-
-    </h5>
-    <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">extends</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>Collection&lt;class-string, list&lt;class-string&lt;MethodInterceptor&gt;&gt;&gt;</p>
-</section>
-
-                                    </dd>
-                                            </dl>
 
 
 
@@ -155,12 +141,19 @@
 
 <h3 id="toc">
     Table of Contents
-    <a href="classes/Ngmy-LaravelAop-Collections-InterceptMap.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/Ngmy-LaravelAop-Aspects-Logging-Interceptors-ExceptionLogLevelInterceptor.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h3>
 
 
 
+    <h4 id="toc-interfaces">
+        Interfaces
+        <a href="classes/Ngmy-LaravelAop-Aspects-Logging-Interceptors-ExceptionLogLevelInterceptor.html#toc-interfaces" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <dl class="phpdocumentor-table-of-contents">
+                    <dt class="phpdocumentor-table-of-contents__entry -interface"><abbr title="\Ray\Aop\MethodInterceptor">MethodInterceptor</abbr></dt>    </dl>
 
 
 
@@ -170,16 +163,29 @@
 
 <h4 id="toc-methods">
     Methods
-    <a href="classes/Ngmy-LaravelAop-Collections-InterceptMap.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/Ngmy-LaravelAop-Aspects-Logging-Interceptors-ExceptionLogLevelInterceptor.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a class="" href="classes/Ngmy-LaravelAop-Collections-InterceptMap.html#method_default">default()</a>
+    <a class="" href="classes/Ngmy-LaravelAop-Aspects-Logging-Interceptors-ExceptionLogLevelInterceptor.html#method_invoke">invoke()</a>
     <span>
-                                &nbsp;: self    </span>
+                                &nbsp;: mixed    </span>
 </dt>
-<dd>Create a new instance with default values.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a class="" href="classes/Ngmy-LaravelAop-Aspects-Logging-Interceptors-ExceptionLogLevelInterceptor.html#method_executeAndSetExceptionLogLevel">executeAndSetExceptionLogLevel()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd>Execute the callback and set the log level.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a class="" href="classes/Ngmy-LaravelAop-Aspects-Logging-Interceptors-ExceptionLogLevelInterceptor.html#method_getExceptionHandler">getExceptionHandler()</a>
+    <span>
+                                &nbsp;: <abbr title="\Illuminate\Foundation\Exceptions\Handler">Handler</abbr>    </span>
+</dt>
+<dd>Get the exception handler.</dd>
 
     </dl>
 
@@ -192,32 +198,140 @@
             <section class="phpdocumentor-methods">
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
-            <a href="classes/Ngmy-LaravelAop-Collections-InterceptMap.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/Ngmy-LaravelAop-Aspects-Logging-Interceptors-ExceptionLogLevelInterceptor.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
 
         </h3>
                     <article
         class="phpdocumentor-element
             -method
             -public
-                                    -static                    "
+                                                        "
 >
-    <h4 class="phpdocumentor-element__name" id="method_default">
-        default()
-        <a href="classes/Ngmy-LaravelAop-Collections-InterceptMap.html#method_default" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_invoke">
+        invoke()
+        <a href="classes/Ngmy-LaravelAop-Aspects-Logging-Interceptors-ExceptionLogLevelInterceptor.html#method_invoke" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="src/Collections/InterceptMap.php"><a href="files/src-collections-interceptmap.html"><abbr title="src/Collections/InterceptMap.php">InterceptMap.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Aspects/Logging/Interceptors/ExceptionLogLevelInterceptor.php"><a href="files/src-aspects-logging-interceptors-exceptionloglevelinterceptor.html"><abbr title="src/Aspects/Logging/Interceptors/ExceptionLogLevelInterceptor.php">ExceptionLogLevelInterceptor.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">30</span>
+    <span class="phpdocumentor-element-found-in__line">17</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Create a new instance with default values.</p>
-
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">default</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">self</span></code>
+                    <span class="phpdocumentor-signature__name">invoke</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Ray\Aop\MethodInvocation">MethodInvocation</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$invocation</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$invocation</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Ray\Aop\MethodInvocation">MethodInvocation</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_executeAndSetExceptionLogLevel">
+        executeAndSetExceptionLogLevel()
+        <a href="classes/Ngmy-LaravelAop-Aspects-Logging-Interceptors-ExceptionLogLevelInterceptor.html#method_executeAndSetExceptionLogLevel" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Aspects/Logging/Interceptors/ExceptionLogLevelInterceptor.php"><a href="files/src-aspects-logging-interceptors-exceptionloglevelinterceptor.html"><abbr title="src/Aspects/Logging/Interceptors/ExceptionLogLevelInterceptor.php">ExceptionLogLevelInterceptor.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">38</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Execute the callback and set the log level.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">executeAndSetExceptionLogLevel</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$callback</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/Ngmy-LaravelAop-Aspects-Logging-Attributes-ExceptionLogLevel.html"><abbr title="\Ngmy\LaravelAop\Aspects\Logging\Attributes\ExceptionLogLevel">ExceptionLogLevel</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$attribute</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$callback</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The callback</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$attribute</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/Ngmy-LaravelAop-Aspects-Logging-Attributes-ExceptionLogLevel.html"><abbr title="\Ngmy\LaravelAop\Aspects\Logging\Attributes\ExceptionLogLevel">ExceptionLogLevel</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The attribute</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>The result of the callback</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getExceptionHandler">
+        getExceptionHandler()
+        <a href="classes/Ngmy-LaravelAop-Aspects-Logging-Interceptors-ExceptionLogLevelInterceptor.html#method_getExceptionHandler" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/Aspects/Logging/Interceptors/ExceptionLogLevelInterceptor.php"><a href="files/src-aspects-logging-interceptors-exceptionloglevelinterceptor.html"><abbr title="src/Aspects/Logging/Interceptors/ExceptionLogLevelInterceptor.php">ExceptionLogLevelInterceptor.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">54</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Get the exception handler.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">getExceptionHandler</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Illuminate\Foundation\Exceptions\Handler">Handler</abbr></span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -230,7 +344,11 @@
 
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-        <span class="phpdocumentor-signature__response_type">self</span>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Illuminate\Foundation\Exceptions\Handler">Handler</abbr></span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>The exception handler</p>
+</section>
+
             </section>
 
 </article>
@@ -240,7 +358,7 @@
     <div class="phpdocumentor-modal-bg" data-exit-button></div>
     <div class="phpdocumentor-modal-container">
         <div class="phpdocumentor-modal-content">
-            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/src/Collections/InterceptMap.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/src/Aspects/Logging/Interceptors/ExceptionLogLevelInterceptor.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
         </div>
         <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
     </div>
@@ -339,7 +457,7 @@
             <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                                                                <li><a href="classes/Ngmy-LaravelAop-Collections-InterceptMap.html#toc-methods">Methods</a></li>
+                                                                                <li><a href="classes/Ngmy-LaravelAop-Aspects-Logging-Interceptors-ExceptionLogLevelInterceptor.html#toc-methods">Methods</a></li>
                                     </ul>
             </li>
             
@@ -347,7 +465,9 @@
                         <li class="phpdocumentor-on-this-page-section__title">Methods</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                            <li class=""><a href="classes/Ngmy-LaravelAop-Collections-InterceptMap.html#method_default">default()</a></li>
+                                            <li class=""><a href="classes/Ngmy-LaravelAop-Aspects-Logging-Interceptors-ExceptionLogLevelInterceptor.html#method_invoke">invoke()</a></li>
+                                            <li class=""><a href="classes/Ngmy-LaravelAop-Aspects-Logging-Interceptors-ExceptionLogLevelInterceptor.html#method_executeAndSetExceptionLogLevel">executeAndSetExceptionLogLevel()</a></li>
+                                            <li class=""><a href="classes/Ngmy-LaravelAop-Aspects-Logging-Interceptors-ExceptionLogLevelInterceptor.html#method_getExceptionHandler">getExceptionHandler()</a></li>
                                     </ul>
             </li>
                     </ul>
@@ -367,7 +487,7 @@
     </section>
 </section>
         </div>
-        <a href="classes/Ngmy-LaravelAop-Collections-InterceptMap.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="classes/Ngmy-LaravelAop-Aspects-Logging-Interceptors-ExceptionLogLevelInterceptor.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 
