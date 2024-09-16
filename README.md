@@ -186,6 +186,7 @@ You may easily compile the AOP classes automatically after the `dump-autoload` C
 ## Built-in attributes
 
 - [Cache](https://ngmy.github.io/Laravel.Aop/namespaces/ngmy-laravelaop-aspects-cache-attributes.html)
+- [Logging](https://ngmy.github.io/Laravel.Aop/namespaces/ngmy-laravelaop-aspects-logging-attributes.html)
 - [Transaction](https://ngmy.github.io/Laravel.Aop/namespaces/ngmy-laravelaop-aspects-transaction-attributes.html)
 - [Retry](https://ngmy.github.io/Laravel.Aop/namespaces/ngmy-laravelaop-aspects-retry-attributes.html)
 

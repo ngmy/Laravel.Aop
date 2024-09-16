@@ -66,6 +66,7 @@
         "composer-attribute-collector": {
             "include": [
                 "tests/Feature/Aspects/Cache/stubs",
+                "tests/Feature/Aspects/Logging/stubs",
                 "tests/Feature/Aspects/Retry/stubs",
                 "tests/Feature/Aspects/Transaction/stubs",
                 "tests/Feature/stubs"

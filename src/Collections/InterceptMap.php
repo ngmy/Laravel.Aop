@@ -11,6 +11,8 @@ use Ngmy\LaravelAop\Aspects\Cache\Attributes\FlushBefore;
 use Ngmy\LaravelAop\Aspects\Cache\Interceptors\CacheableInterceptor;
 use Ngmy\LaravelAop\Aspects\Cache\Interceptors\FlushAfterInterceptor;
 use Ngmy\LaravelAop\Aspects\Cache\Interceptors\FlushBeforeInterceptor;
+use Ngmy\LaravelAop\Aspects\Logging\Attributes\ExceptionLogLevel;
+use Ngmy\LaravelAop\Aspects\Logging\Interceptors\ExceptionLogLevelInterceptor;
 use Ngmy\LaravelAop\Aspects\Retry\Attributes\RetryOnFailure;
 use Ngmy\LaravelAop\Aspects\Retry\Interceptors\RetryOnFailureInterceptor;
 use Ngmy\LaravelAop\Aspects\Transaction\Attributes\Transactional;
@@ -36,6 +38,9 @@ final class InterceptMap extends Collection
             ],
             FlushBefore::class => [
                 FlushBeforeInterceptor::class,
+            ],
+            ExceptionLogLevel::class => [
+                ExceptionLogLevelInterceptor::class,
             ],
             RetryOnFailure::class => [
                 RetryOnFailureInterceptor::class,
