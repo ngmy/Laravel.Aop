@@ -23,7 +23,7 @@ use Psr\Log\LogLevel;
 final class RetryTest extends TestCase
 {
     /**
-     * @return iterable<string, list{class-string, string, ExpectedLogs}> The cache cases
+     * @return iterable<string, list{class-string, string, ExpectedLogs}> The retry cases
      */
     public static function provideRetryCases(): iterable
     {
