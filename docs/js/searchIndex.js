@@ -391,6 +391,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Ngmy-LaravelAop-ServiceProvider.html#method_boot"
         },                {
+            "fqsen": "\\Ngmy\\LaravelAop\\ServiceProvider\u003A\u003ArunInCompileCommand\u0028\u0029",
+            "name": "runInCompileCommand",
+            "summary": "Check\u0020if\u0020the\u0020command\u0020is\u0020running\u0020in\u0020the\u0020compile\u0020command.",
+            "url": "classes/Ngmy-LaravelAop-ServiceProvider.html#method_runInCompileCommand"
+        },                {
+            "fqsen": "\\Ngmy\\LaravelAop\\ServiceProvider\u003A\u003ArunInWatchCommand\u0028\u0029",
+            "name": "runInWatchCommand",
+            "summary": "Check\u0020if\u0020the\u0020command\u0020is\u0020running\u0020in\u0020the\u0020watch\u0020command.",
+            "url": "classes/Ngmy-LaravelAop-ServiceProvider.html#method_runInWatchCommand"
+        },                {
             "fqsen": "\\Ngmy\\LaravelAop\\Services\\ClassLoader",
             "name": "ClassLoader",
             "summary": "",
