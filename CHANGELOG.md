@@ -1,5 +1,9 @@
 # Release Notes
 
+## [0.9.0](https://github.com/ngmy/Laravel.Aop/compare/0.8.0...0.9.0) - 2024-09-18
+
+- Fix the bug where the second compilation for Artisan commands fails.
+
 ## [0.8.0](https://github.com/ngmy/Laravel.Aop/compare/0.7.0...0.8.0) - 2024-09-16
 
 - Add the `ExceptionLogLevel` attribute.
