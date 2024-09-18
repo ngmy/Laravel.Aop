@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ngmy\LaravelAop\Tests\utils;
+namespace Ngmy\LaravelAop\Tests\utils\Spies;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;

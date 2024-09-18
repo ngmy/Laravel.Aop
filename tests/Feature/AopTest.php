@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Ngmy\LaravelAop\Tests\Feature;
 
 use Illuminate\Support\Facades\File;
-use Illuminate\Testing\PendingCommand;
 use Ngmy\LaravelAop\Services\ServiceRegistrar;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Attributes\TestAttribute1;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Attributes\TestAttribute2;
@@ -17,7 +16,9 @@ use Ngmy\LaravelAop\Tests\Feature\stubs\Interceptors\TestInterceptor2;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Interceptors\TestInterceptor3;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Targets\TestTarget1;
 use Ngmy\LaravelAop\Tests\TestCase;
-use Ngmy\LaravelAop\Tests\utils\SpyLogger;
+use Ngmy\LaravelAop\Tests\utils\Attributes\DoesNotDeleteCompiledDirectoryAfter;
+use Ngmy\LaravelAop\Tests\utils\Attributes\DoesNotDeleteCompiledDirectoryBefore;
+use Ngmy\LaravelAop\Tests\utils\Spies\SpyLogger;
 use Psr\Log\LogLevel;
 
 /**
@@ -42,17 +43,6 @@ use Psr\Log\LogLevel;
 final class AopTest extends TestCase
 {
     protected bool $compileAopClasses = false;
-
-    private string $compiledPath;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        /** @var string $compiledPath */
-        $compiledPath = config('aop.compiled');
-        $this->compiledPath = $compiledPath;
-    }
 
     /**
      * @return iterable<string, list{class-string, string, ExpectedLogs, bool, bool}> The AOP cases
@@ -169,6 +159,8 @@ final class AopTest extends TestCase
      * @param ExpectedLogs $expectedLogs     The expected logs
      * @param bool         $isFirst          Whether this is the first case
      */
+    #[DoesNotDeleteCompiledDirectoryAfter]
+    #[DoesNotDeleteCompiledDirectoryBefore]
     public function testAopWhenCompiledClassesAreLoaded(
         string $targetClassName,
         string $targetMethodName,
@@ -201,6 +193,8 @@ final class AopTest extends TestCase
      * @param ExpectedLogs $expectedLogs     The expected logs
      * @param bool         $isLast           Whether this is the last case
      */
+    #[DoesNotDeleteCompiledDirectoryAfter]
+    #[DoesNotDeleteCompiledDirectoryBefore]
     public function testAopWhenCompiledClassesAreNotLoaded(
         string $targetClassName,
         string $targetMethodName,
@@ -219,16 +213,20 @@ final class AopTest extends TestCase
 
     public function testCompileCommandWhenCompiledFilesExist(): void
     {
-        File::deleteDirectory($this->compiledPath);
-
         // Create dummy compiled files
         File::makeDirectory($this->compiledPath, 0o755, true, true);
         File::put($this->compiledPath.'/source_map.ser', '');
         File::put($this->compiledPath.'/Ngmy_LaravelAop_Tests_Feature_stubs_Targets_TestTarget1_3064002867.php', '');
 
         $this->assertCompileCommand();
+    }
 
-        File::deleteDirectory($this->compiledPath);
+    public function testBindWhenSourceMapFileDoesNotExist(): void
+    {
+        $serviceRegistrar = $this->app->make(ServiceRegistrar::class);
+        $serviceRegistrar->bind();
+
+        self::assertTrue(true);
     }
 
     protected function resolveApplicationConfiguration($app): void
@@ -278,18 +276,5 @@ final class AopTest extends TestCase
         $target->{$targetMethodName}();
 
         self::assertLogCalls($expectedLogs, $spyLogger);
-    }
-
-    /**
-     * Assert the compile command.
-     */
-    private function assertCompileCommand(): void
-    {
-        /** @var PendingCommand $command */
-        $command = $this->artisan('aop:compile');
-        $command->run();
-        $command->assertSuccessful();
-
-        self::assertDirectoryExists($this->compiledPath);
     }
 }

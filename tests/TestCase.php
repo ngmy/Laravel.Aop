@@ -5,8 +5,13 @@ declare(strict_types=1);
 namespace Ngmy\LaravelAop\Tests;
 
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Facades\File;
 use Ngmy\LaravelAop\Services\ServiceRegistrar;
-use Ngmy\LaravelAop\Tests\utils\SpyLoggerAssertions;
+use Ngmy\LaravelAop\Tests\utils\Assertions\ArtisanAssertions;
+use Ngmy\LaravelAop\Tests\utils\Assertions\SpyLoggerAssertions;
+use Ngmy\LaravelAop\Tests\utils\Attributes\DoesNotDeleteCompiledDirectoryAfter;
+use Ngmy\LaravelAop\Tests\utils\Attributes\DoesNotDeleteCompiledDirectoryBefore;
+use Ngmy\LaravelAop\Tests\utils\Helpers\AttributeHelpers;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 /**
@@ -14,9 +19,16 @@ use Orchestra\Testbench\TestCase as BaseTestCase;
  */
 abstract class TestCase extends BaseTestCase
 {
+    use ArtisanAssertions;
+    use AttributeHelpers;
     use SpyLoggerAssertions;
 
     protected $enablesPackageDiscoveries = true;
+
+    /**
+     * The compiled path.
+     */
+    protected string $compiledPath;
 
     /**
      * Whether to compile AOP classes before each test.
@@ -27,9 +39,26 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
+        /** @var string $compiledPath */
+        $compiledPath = config('aop.compiled');
+        $this->compiledPath = $compiledPath;
+
+        if (!$this->hasAttributes(DoesNotDeleteCompiledDirectoryBefore::class)) {
+            File::deleteDirectory($this->compiledPath);
+        }
+
         if ($this->compileAopClasses) {
-            $this->artisan('aop:compile');
+            $this->assertCompileCommand();
             $this->app->make(ServiceRegistrar::class)->bind();
         }
+    }
+
+    protected function tearDown(): void
+    {
+        if (!$this->hasAttributes(DoesNotDeleteCompiledDirectoryAfter::class)) {
+            File::deleteDirectory($this->compiledPath);
+        }
+
+        parent::tearDown();
     }
 }

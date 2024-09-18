@@ -9,7 +9,7 @@ use Ngmy\LaravelAop\Tests\Feature\Aspects\Retry\stubs\Attributes\TestAttribute1;
 use Ngmy\LaravelAop\Tests\Feature\Aspects\Retry\stubs\Interceptors\TestInterceptor1;
 use Ngmy\LaravelAop\Tests\Feature\Aspects\Retry\stubs\Targets\TestTarget1;
 use Ngmy\LaravelAop\Tests\TestCase;
-use Ngmy\LaravelAop\Tests\utils\SpyLogger;
+use Ngmy\LaravelAop\Tests\utils\Spies\SpyLogger;
 use Psr\Log\LogLevel;
 
 /**

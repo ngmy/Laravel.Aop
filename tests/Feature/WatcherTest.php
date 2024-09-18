@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Ngmy\LaravelAop\Tests\Feature;
 
-use Illuminate\Testing\PendingCommand;
 use Ngmy\LaravelAop\Tests\TestCase;
-use Ngmy\LaravelAop\Tests\utils\SpyLogger;
+use Ngmy\LaravelAop\Tests\utils\Spies\SpyLogger;
 use Psr\Log\LogLevel;
 
 /**
@@ -25,11 +24,7 @@ final class WatcherTest extends TestCase
     {
         $spyLogger = (new SpyLogger())->use();
 
-        /** @var PendingCommand $command */
-        $command = $this->artisan('aop:watch');
-        $command->run();
-        $command->expectsOutput('Watching...');
-        $command->assertSuccessful();
+        $this->assertWatchCommand();
 
         $format = '%s [%s].';
         $path = app_path('test.php');

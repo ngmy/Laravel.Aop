@@ -35,6 +35,10 @@ final class ServiceProvider extends BaseServiceProvider
             ->giveConfig('aop.watcher.paths')
         ;
 
+        if ($this->runInCompileCommand() || $this->runInWatchCommand()) {
+            return;
+        }
+
         ServiceLocator::setReader(new AttributeReader());
 
         $registrar = $this->app->make(ServiceRegistrar::class);
@@ -53,5 +57,27 @@ final class ServiceProvider extends BaseServiceProvider
                 WatchCommand::class,
             ]);
         }
+    }
+
+    /**
+     * Check if the command is running in the compile command.
+     *
+     * @return bool True if the command is running in the compile command, false otherwise
+     */
+    private function runInCompileCommand(): bool
+    {
+        return isset($_SERVER['argv'][0]) && 'artisan' === $_SERVER['argv'][0]
+            && isset($_SERVER['argv'][1]) && 'aop:compile' === $_SERVER['argv'][1];
+    }
+
+    /**
+     * Check if the command is running in the watch command.
+     *
+     * @return bool True if the command is running in the watch command, false otherwise
+     */
+    private function runInWatchCommand(): bool
+    {
+        return isset($_SERVER['argv'][0]) && 'artisan' === $_SERVER['argv'][0]
+            && isset($_SERVER['argv'][1]) && 'aop:watch' === $_SERVER['argv'][1];
     }
 }

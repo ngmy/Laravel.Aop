@@ -2,12 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Ngmy\LaravelAop\Tests\utils;
+namespace Ngmy\LaravelAop\Tests\utils\Assertions;
 
+use Ngmy\LaravelAop\Tests\TestCase;
+use Ngmy\LaravelAop\Tests\utils\Spies\SpyLogger;
 use Psr\Log\LogLevel;
 
 /**
  * @phpstan-type ExpectedLogs list<list{LogLevel::*, string}>
+ *
+ * @require-extends TestCase
  */
 trait SpyLoggerAssertions
 {
