@@ -17,7 +17,7 @@ trait SpyLoggerAssertions
      * @param int       $expectedCount The expected log calls count
      * @param SpyLogger $spyLogger     The spy logger
      */
-    public static function assertLogCallsCount(int $expectedCount, SpyLogger $spyLogger): void
+    protected static function assertLogCallsCount(int $expectedCount, SpyLogger $spyLogger): void
     {
         self::assertCount($expectedCount, $spyLogger->logCalls);
     }
@@ -30,7 +30,7 @@ trait SpyLoggerAssertions
      * @param string      $expectedLogMessage The expected log message
      * @param SpyLogger   $spyLogger          The spy logger
      */
-    public static function assertLogCall(int $order, string $expectedLogLevel, string $expectedLogMessage, SpyLogger $spyLogger): void
+    protected static function assertLogCall(int $order, string $expectedLogLevel, string $expectedLogMessage, SpyLogger $spyLogger): void
     {
         self::assertSame($expectedLogLevel, $spyLogger->logCalls[$order]['level']);
         self::assertSame($expectedLogMessage, $spyLogger->logCalls[$order]['message']);
@@ -42,7 +42,7 @@ trait SpyLoggerAssertions
      * @param ExpectedLogs $expectedLogs The expected logs
      * @param SpyLogger    $spyLogger    The spy logger
      */
-    public static function assertLogCalls(array $expectedLogs, SpyLogger $spyLogger): void
+    protected static function assertLogCalls(array $expectedLogs, SpyLogger $spyLogger): void
     {
         self::assertLogCallsCount(\count($expectedLogs), $spyLogger);
 
