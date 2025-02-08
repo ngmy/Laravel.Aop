@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ngmy\LaravelAop\Tests\Feature\Aspects\Transaction;
 
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Ngmy\LaravelAop\Tests\Feature\Aspects\Transaction\stubs\Targets\TestTarget1;
@@ -34,7 +35,7 @@ final class TransactionTest extends TestCase
         foreach ($this->connections as $connection) {
             Schema::connection($connection)->dropIfExists('test_table');
 
-            Schema::connection($connection)->create('test_table', static function ($table): void {
+            Schema::connection($connection)->create('test_table', static function (Blueprint $table): void {
                 $table->increments('id');
                 $table->string('name');
             });

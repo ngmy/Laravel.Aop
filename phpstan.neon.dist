@@ -10,5 +10,9 @@ parameters:
     - vendor-bin
   bootstrapFiles:
     - vendor-bin/php-cs-fixer/vendor/autoload.php
+  ignoreErrors:
+    - identifier: larastan.noEnvCallsOutsideOfConfig
+      path: config
+      reportUnmatched: false # Add for Larastan 2.
 
 # vim: set ft=yaml:

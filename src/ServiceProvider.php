@@ -66,8 +66,12 @@ final class ServiceProvider extends BaseServiceProvider
      */
     private function runInCompileCommand(): bool
     {
-        return isset($_SERVER['argv'][0]) && 'artisan' === $_SERVER['argv'][0]
-            && isset($_SERVER['argv'][1]) && 'aop:compile' === $_SERVER['argv'][1];
+        $argv = request()->server->get('argv');
+
+        \assert(\is_array($argv));
+
+        return isset($argv[0]) && 'artisan' === $argv[0]
+            && isset($argv[1]) && 'aop:compile' === $argv[1];
     }
 
     /**
@@ -77,7 +81,11 @@ final class ServiceProvider extends BaseServiceProvider
      */
     private function runInWatchCommand(): bool
     {
-        return isset($_SERVER['argv'][0]) && 'artisan' === $_SERVER['argv'][0]
-            && isset($_SERVER['argv'][1]) && 'aop:watch' === $_SERVER['argv'][1];
+        $argv = request()->server->get('argv');
+
+        \assert(\is_array($argv));
+
+        return isset($argv[0]) && 'artisan' === $argv[0]
+            && isset($argv[1]) && 'aop:watch' === $argv[1];
     }
 }

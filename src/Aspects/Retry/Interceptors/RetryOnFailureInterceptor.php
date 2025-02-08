@@ -46,8 +46,8 @@ final class RetryOnFailureInterceptor implements MethodInterceptor
     /**
      * Retry an operation a given number of times.
      *
-     * @param MethodInvocation $invocation The method invocation
-     * @param RetryOnFailure   $attribute  The attribute
+     * @param MethodInvocation<object> $invocation The method invocation
+     * @param RetryOnFailure           $attribute  The attribute
      *
      * @return mixed The result of the method invocation
      */

@@ -19,4 +19,7 @@ RUN apt-get update && apt-get install -y \
     nodejs \
     npm
 
+# Add to silence Git permission issues in Composer.
+RUN git config --global --add safe.directory /var/www
+
 COPY --from=composer /usr/bin/composer /usr/bin/composer

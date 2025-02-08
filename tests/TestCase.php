@@ -43,7 +43,7 @@ abstract class TestCase extends BaseTestCase
         $compiledPath = config('aop.compiled');
         $this->compiledPath = $compiledPath;
 
-        if (!$this->hasAttributes(DoesNotDeleteCompiledDirectoryBefore::class)) {
+        if (!$this->hasAttribute(DoesNotDeleteCompiledDirectoryBefore::class)) {
             File::deleteDirectory($this->compiledPath);
         }
 
@@ -55,7 +55,7 @@ abstract class TestCase extends BaseTestCase
 
     protected function tearDown(): void
     {
-        if (!$this->hasAttributes(DoesNotDeleteCompiledDirectoryAfter::class)) {
+        if (!$this->hasAttribute(DoesNotDeleteCompiledDirectoryAfter::class)) {
             File::deleteDirectory($this->compiledPath);
         }
 

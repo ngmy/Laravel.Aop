@@ -8,6 +8,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\App;
 use Ngmy\LaravelAop\Collections\SourceMap;
 use Ngmy\LaravelAop\ValueObjects\SourceMapFile;
+use Ray\Aop\WeavedInterface;
 
 final class ServiceRegistrar
 {
@@ -32,7 +33,7 @@ final class ServiceRegistrar
         $sourceMap = $this->getSourceMap();
 
         foreach ($sourceMap as $targetClassName => $compiledClass) {
-            App::bind($targetClassName, function (Application $app, array $params) use ($compiledClass): object {
+            App::bind($targetClassName, function (Application $app, array $params) use ($compiledClass): WeavedInterface {
                 $compiledClassName = $compiledClass->getClassName();
 
                 if (!class_exists($compiledClassName, false)) {
@@ -40,6 +41,10 @@ final class ServiceRegistrar
                 }
 
                 $instance = $app->make($compiledClassName, $params);
+
+                \assert($instance instanceof WeavedInterface);
+                \assert(property_exists($instance, 'bindings'));
+
                 $instance->bindings = $compiledClass->getBindings();
 
                 return $instance;

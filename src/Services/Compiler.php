@@ -43,7 +43,11 @@ final class Compiler
             File::put($this->compiledPath->getPathname().'/.gitignore', "*\n!.gitignore\n");
         }
 
-        $this->compiler = new RayCompiler($this->compiledPath->getPathname());
+        $path = $this->compiledPath->getPathname();
+
+        \assert('' !== $path);
+
+        $this->compiler = new RayCompiler($path);
     }
 
     /**

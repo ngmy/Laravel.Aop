@@ -19,6 +19,7 @@ use Ngmy\LaravelAop\Tests\TestCase;
 use Ngmy\LaravelAop\Tests\utils\Attributes\DoesNotDeleteCompiledDirectoryAfter;
 use Ngmy\LaravelAop\Tests\utils\Attributes\DoesNotDeleteCompiledDirectoryBefore;
 use Ngmy\LaravelAop\Tests\utils\Spies\SpyLogger;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use Psr\Log\LogLevel;
 
 /**
@@ -221,12 +222,11 @@ final class AopTest extends TestCase
         $this->assertCompileCommand();
     }
 
+    #[DoesNotPerformAssertions]
     public function testBindWhenSourceMapFileDoesNotExist(): void
     {
         $serviceRegistrar = $this->app->make(ServiceRegistrar::class);
         $serviceRegistrar->bind();
-
-        self::assertTrue(true);
     }
 
     protected function resolveApplicationConfiguration($app): void
