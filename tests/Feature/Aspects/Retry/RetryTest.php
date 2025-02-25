@@ -23,6 +23,36 @@ use Psr\Log\LogLevel;
 final class RetryTest extends TestCase
 {
     /**
+     * @dataProvider provideRetryCases
+     *
+     * @param class-string                  $targetClassName    The class name of the target
+     * @param string                        $targetMethodName   The method name of the target
+     * @param ExpectedLogs                  $expectedLogs       The expected logs
+     * @param null|class-string<\Throwable> $exceptionClassName The exception class name
+     */
+    public function testRetry(
+        string $targetClassName,
+        string $targetMethodName,
+        array $expectedLogs,
+        ?string $exceptionClassName,
+    ): void {
+        $target = $this->app->make($targetClassName);
+
+        $spyLogger = (new SpyLogger())->use();
+
+        try {
+            $target->{$targetMethodName}();
+        } catch (\Throwable $e) {
+            if (null === $exceptionClassName) {
+                self::fail('An exception was thrown unexpectedly.');
+            }
+            self::assertInstanceOf($exceptionClassName, $e);
+        } finally {
+            self::assertLogCalls($expectedLogs, $spyLogger);
+        }
+    }
+
+    /**
      * @return iterable<string, list{class-string, string, ExpectedLogs}> The retry cases
      */
     public static function provideRetryCases(): iterable
@@ -108,36 +138,6 @@ final class RetryTest extends TestCase
                 \Exception::class,
             ],
         ];
-    }
-
-    /**
-     * @dataProvider provideRetryCases
-     *
-     * @param class-string                  $targetClassName    The class name of the target
-     * @param string                        $targetMethodName   The method name of the target
-     * @param ExpectedLogs                  $expectedLogs       The expected logs
-     * @param null|class-string<\Throwable> $exceptionClassName The exception class name
-     */
-    public function testRetry(
-        string $targetClassName,
-        string $targetMethodName,
-        array $expectedLogs,
-        ?string $exceptionClassName,
-    ): void {
-        $target = $this->app->make($targetClassName);
-
-        $spyLogger = (new SpyLogger())->use();
-
-        try {
-            $target->{$targetMethodName}();
-        } catch (\Throwable $e) {
-            if (null === $exceptionClassName) {
-                self::fail('An exception was thrown unexpectedly.');
-            }
-            self::assertInstanceOf($exceptionClassName, $e);
-        } finally {
-            self::assertLogCalls($expectedLogs, $spyLogger);
-        }
     }
 
     protected function resolveApplicationConfiguration($app): void
