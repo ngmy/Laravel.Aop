@@ -43,9 +43,8 @@ final class ServiceRegistrar
                 $instance = $app->make($compiledClassName, $params);
 
                 \assert($instance instanceof WeavedInterface);
-                \assert(property_exists($instance, 'bindings'));
 
-                $instance->bindings = $compiledClass->getBindings();
+                $instance->_setBindings($compiledClass->getBindings());
 
                 return $instance;
             });
