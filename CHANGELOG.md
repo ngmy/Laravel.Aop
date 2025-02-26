@@ -1,5 +1,10 @@
 # Release Notes
 
+## [0.10.0](https://github.com/ngmy/Laravel.Aop/compare/0.9.0...0.10.0) - 2025-02-26
+
+- Add compatibility with PHP 8.4. Drop compatibility with Laravel 9.
+- Support AOP targeting readonly classes.
+
 ## [0.9.0](https://github.com/ngmy/Laravel.Aop/compare/0.8.0...0.9.0) - 2024-09-18
 
 - Fix the bug where the second compilation for Artisan commands fails.
