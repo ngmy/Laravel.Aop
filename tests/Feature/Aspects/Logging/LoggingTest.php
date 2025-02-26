@@ -21,37 +21,6 @@ use Psr\Log\LogLevel;
 final class LoggingTest extends TestCase
 {
     /**
-     * @return iterable<string, list{class-string, string, array<class-string<\Throwable>, LogLevel::*>}> The exception cases
-     */
-    public static function provideExceptionLogLevelAttributeCases(): iterable
-    {
-        return [
-            'change log level of one exception' => [
-                TestTarget1::class,
-                'method1',
-                [
-                    \Exception::class => LogLevel::CRITICAL,
-                ],
-            ],
-            'change log level of two exceptions' => [
-                TestTarget1::class,
-                'method2',
-                [
-                    \LogicException::class => LogLevel::CRITICAL,
-                    \RuntimeException::class => LogLevel::CRITICAL,
-                ],
-            ],
-            'change log level of one exception twice' => [
-                TestTarget1::class,
-                'method3',
-                [
-                    \Exception::class => LogLevel::ALERT,
-                ],
-            ],
-        ];
-    }
-
-    /**
      * @dataProvider provideExceptionLogLevelAttributeCases
      *
      * @param class-string                                 $targetClassName   The class name of the target
@@ -87,6 +56,37 @@ final class LoggingTest extends TestCase
         );
 
         $this->assertExceptionLogLevelAttribute($targetClassName, $targetMethodName, $expectedLogLevels);
+    }
+
+    /**
+     * @return iterable<string, list{class-string, string, array<class-string<\Throwable>, LogLevel::*>}> The exception cases
+     */
+    public static function provideExceptionLogLevelAttributeCases(): iterable
+    {
+        return [
+            'change log level of one exception' => [
+                TestTarget1::class,
+                'method1',
+                [
+                    \Exception::class => LogLevel::CRITICAL,
+                ],
+            ],
+            'change log level of two exceptions' => [
+                TestTarget1::class,
+                'method2',
+                [
+                    \LogicException::class => LogLevel::CRITICAL,
+                    \RuntimeException::class => LogLevel::CRITICAL,
+                ],
+            ],
+            'change log level of one exception twice' => [
+                TestTarget1::class,
+                'method3',
+                [
+                    \Exception::class => LogLevel::ALERT,
+                ],
+            ],
+        ];
     }
 
     /**

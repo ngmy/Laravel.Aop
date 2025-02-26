@@ -47,6 +47,66 @@ final class AopTest extends TestCase
     protected bool $compileAopClasses = false;
 
     /**
+     * @dataProvider provideAopCases
+     *
+     * @param class-string $targetClassName  The class name of the target
+     * @param string       $targetMethodName The method name of the target
+     * @param ExpectedLogs $expectedLogs     The expected logs
+     * @param bool         $isFirst          Whether this is the first case
+     */
+    #[DoesNotDeleteCompiledDirectoryAfter]
+    #[DoesNotDeleteCompiledDirectoryBefore]
+    public function testAopWhenCompiledClassesAreLoaded(
+        string $targetClassName,
+        string $targetMethodName,
+        array $expectedLogs,
+        bool $isFirst,
+        bool $_,
+    ): void {
+        if ($isFirst) {
+            File::deleteDirectory($this->compiledPath);
+
+            $this->assertCompileCommand();
+        }
+
+        $this->assertAop($targetClassName, $targetMethodName, $expectedLogs);
+    }
+
+    /**
+     * This test is run in a separate process to test when compiled AOP classes are not loaded.
+     *
+     * @dataProvider provideAopCases
+     *
+     * @runInSeparateProcess
+     *
+     * @preserveGlobalState disabled
+     *
+     * @depends testAopWhenCompiledClassesAreLoaded
+     *
+     * @param class-string $targetClassName  The class name of the target
+     * @param string       $targetMethodName The method name of the target
+     * @param ExpectedLogs $expectedLogs     The expected logs
+     * @param bool         $isLast           Whether this is the last case
+     */
+    #[DoesNotDeleteCompiledDirectoryAfter]
+    #[DoesNotDeleteCompiledDirectoryBefore]
+    public function testAopWhenCompiledClassesAreNotLoaded(
+        string $targetClassName,
+        string $targetMethodName,
+        array $expectedLogs,
+        bool $_,
+        bool $isLast,
+    ): void {
+        self::assertDirectoryExists($this->compiledPath);
+
+        $this->assertAop($targetClassName, $targetMethodName, $expectedLogs);
+
+        if ($isLast) {
+            File::deleteDirectory($this->compiledPath);
+        }
+    }
+
+    /**
      * @return iterable<string, list{class-string, string, ExpectedLogs, bool, bool}> The AOP cases
      */
     public static function provideAopCases(): iterable
@@ -136,7 +196,7 @@ final class AopTest extends TestCase
             ],
         ];
 
-        if (PHP_VERSION_ID >= 80200) {
+        if (\PHP_VERSION_ID >= 80200) {
             $data['target class is readonly'] = [
                 TestTarget2::class,
                 'method2',
@@ -154,66 +214,6 @@ final class AopTest extends TestCase
         }
 
         return $data;
-    }
-
-    /**
-     * @dataProvider provideAopCases
-     *
-     * @param class-string $targetClassName  The class name of the target
-     * @param string       $targetMethodName The method name of the target
-     * @param ExpectedLogs $expectedLogs     The expected logs
-     * @param bool         $isFirst          Whether this is the first case
-     */
-    #[DoesNotDeleteCompiledDirectoryAfter]
-    #[DoesNotDeleteCompiledDirectoryBefore]
-    public function testAopWhenCompiledClassesAreLoaded(
-        string $targetClassName,
-        string $targetMethodName,
-        array $expectedLogs,
-        bool $isFirst,
-        bool $_,
-    ): void {
-        if ($isFirst) {
-            File::deleteDirectory($this->compiledPath);
-
-            $this->assertCompileCommand();
-        }
-
-        $this->assertAop($targetClassName, $targetMethodName, $expectedLogs);
-    }
-
-    /**
-     * This test is run in a separate process to test when compiled AOP classes are not loaded.
-     *
-     * @dataProvider provideAopCases
-     *
-     * @runInSeparateProcess
-     *
-     * @preserveGlobalState disabled
-     *
-     * @depends testAopWhenCompiledClassesAreLoaded
-     *
-     * @param class-string $targetClassName  The class name of the target
-     * @param string       $targetMethodName The method name of the target
-     * @param ExpectedLogs $expectedLogs     The expected logs
-     * @param bool         $isLast           Whether this is the last case
-     */
-    #[DoesNotDeleteCompiledDirectoryAfter]
-    #[DoesNotDeleteCompiledDirectoryBefore]
-    public function testAopWhenCompiledClassesAreNotLoaded(
-        string $targetClassName,
-        string $targetMethodName,
-        array $expectedLogs,
-        bool $_,
-        bool $isLast,
-    ): void {
-        self::assertDirectoryExists($this->compiledPath);
-
-        $this->assertAop($targetClassName, $targetMethodName, $expectedLogs);
-
-        if ($isLast) {
-            File::deleteDirectory($this->compiledPath);
-        }
     }
 
     public function testCompileCommandWhenCompiledFilesExist(): void
