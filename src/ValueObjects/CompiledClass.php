@@ -7,7 +7,7 @@ namespace Ngmy\LaravelAop\ValueObjects;
 use Ray\Aop\MethodInterceptor;
 
 /**
- * @phpstan-type Bindings array<string, array<(MethodInterceptor|string)>>
+ * @phpstan-type Bindings array<non-empty-string, array<MethodInterceptor>>
  */
 final class CompiledClass
 {

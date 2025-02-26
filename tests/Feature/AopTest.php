@@ -15,6 +15,7 @@ use Ngmy\LaravelAop\Tests\Feature\stubs\Interceptors\TestInterceptor1;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Interceptors\TestInterceptor2;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Interceptors\TestInterceptor3;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Targets\TestTarget1;
+use Ngmy\LaravelAop\Tests\Feature\stubs\Targets\TestTarget2;
 use Ngmy\LaravelAop\Tests\TestCase;
 use Ngmy\LaravelAop\Tests\utils\Attributes\DoesNotDeleteCompiledDirectoryAfter;
 use Ngmy\LaravelAop\Tests\utils\Attributes\DoesNotDeleteCompiledDirectoryBefore;
@@ -50,15 +51,13 @@ final class AopTest extends TestCase
      */
     public static function provideAopCases(): iterable
     {
-        return [
+        $data = [
             'no attribute' => [
                 TestTarget1::class,
                 'method1',
                 [
                     [LogLevel::INFO, \sprintf('%s::%s', TestTarget1::class, 'method1')],
                 ],
-                true,
-                false,
             ],
             'TestAttribute1 -> TestInterceptor1' => [
                 TestTarget1::class,
@@ -68,8 +67,6 @@ final class AopTest extends TestCase
                     [LogLevel::INFO, \sprintf('%s::%s', TestTarget1::class, 'method2')],
                     [LogLevel::INFO, \sprintf('End %s', TestInterceptor1::class)],
                 ],
-                false,
-                false,
             ],
             'TestAttribute2 -> TestInterceptor2' => [
                 TestTarget1::class,
@@ -79,8 +76,6 @@ final class AopTest extends TestCase
                     [LogLevel::INFO, \sprintf('%s::%s', TestTarget1::class, 'method3')],
                     [LogLevel::INFO, \sprintf('End %s', TestInterceptor2::class)],
                 ],
-                false,
-                false,
             ],
             'TestAttribute1 -> TestInterceptor1, TestAttribute2 -> TestInterceptor2' => [
                 TestTarget1::class,
@@ -92,8 +87,6 @@ final class AopTest extends TestCase
                     [LogLevel::INFO, \sprintf('End %s', TestInterceptor2::class)],
                     [LogLevel::INFO, \sprintf('End %s', TestInterceptor1::class)],
                 ],
-                false,
-                false,
             ],
             'TestAttribute2 -> TestInterceptor2, TestAttribute1 -> TestInterceptor1' => [
                 TestTarget1::class,
@@ -105,8 +98,6 @@ final class AopTest extends TestCase
                     [LogLevel::INFO, \sprintf('End %s', TestInterceptor1::class)],
                     [LogLevel::INFO, \sprintf('End %s', TestInterceptor2::class)],
                 ],
-                false,
-                false,
             ],
             'TestAttribute3 -> (TestInterceptor1, TestInterceptor2)' => [
                 TestTarget1::class,
@@ -118,8 +109,6 @@ final class AopTest extends TestCase
                     [LogLevel::INFO, \sprintf('End %s', TestInterceptor2::class)],
                     [LogLevel::INFO, \sprintf('End %s', TestInterceptor1::class)],
                 ],
-                false,
-                false,
             ],
             'TestAttribute4 -> (TestInterceptor2, TestInterceptor1)' => [
                 TestTarget1::class,
@@ -131,8 +120,6 @@ final class AopTest extends TestCase
                     [LogLevel::INFO, \sprintf('End %s', TestInterceptor1::class)],
                     [LogLevel::INFO, \sprintf('End %s', TestInterceptor2::class)],
                 ],
-                false,
-                false,
             ],
             'repeatable attribute with arguments' => [
                 TestTarget1::class,
@@ -146,10 +133,27 @@ final class AopTest extends TestCase
                     [LogLevel::NOTICE, \sprintf('End %s', TestInterceptor3::class)],
                     [LogLevel::INFO, \sprintf('End %s', TestInterceptor3::class)],
                 ],
-                false,
-                true,
             ],
         ];
+
+        if (PHP_VERSION_ID >= 80200) {
+            $data['target class is readonly'] = [
+                TestTarget2::class,
+                'method2',
+                [
+                    [LogLevel::INFO, \sprintf('Start %s', TestInterceptor1::class)],
+                    [LogLevel::INFO, \sprintf('%s::%s', TestTarget2::class, 'method2')],
+                    [LogLevel::INFO, \sprintf('End %s', TestInterceptor1::class)],
+                ],
+            ];
+        }
+
+        foreach ($data as $key => $value) {
+            $data[$key][] = array_key_first($data) === $key;
+            $data[$key][] = array_key_last($data) === $key;
+        }
+
+        return $data;
     }
 
     /**

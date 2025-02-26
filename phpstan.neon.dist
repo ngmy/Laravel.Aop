@@ -8,6 +8,7 @@ parameters:
   excludePaths:
     - vendor
     - vendor-bin
+    - tests/Feature/stubs/Targets/TestTarget2.php # Error message "Readonly classes are supported only on PHP 8.2 and later." cannot be ignored, use excludePaths instead.
   bootstrapFiles:
     - vendor-bin/php-cs-fixer/vendor/autoload.php
   ignoreErrors:
