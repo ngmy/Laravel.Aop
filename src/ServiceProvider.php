@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Ngmy\LaravelAop;
 
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
-use Koriym\Attributes\AttributeReader;
 use Ngmy\LaravelAop\Collections\InterceptMap;
 use Ngmy\LaravelAop\Commands\CompileCommand;
 use Ngmy\LaravelAop\Commands\WatchCommand;
 use Ngmy\LaravelAop\Services\ServiceRegistrar;
 use Ngmy\LaravelAop\Services\Watcher;
 use Ngmy\LaravelAop\ValueObjects\CompiledPath;
-use Ray\ServiceLocator\ServiceLocator;
 
 final class ServiceProvider extends BaseServiceProvider
 {
@@ -38,8 +36,6 @@ final class ServiceProvider extends BaseServiceProvider
         if ($this->runInCompileCommand() || $this->runInWatchCommand()) {
             return;
         }
-
-        ServiceLocator::setReader(new AttributeReader());
 
         $registrar = $this->app->make(ServiceRegistrar::class);
         $registrar->bind();
