@@ -3,7 +3,6 @@
     "description": "Laravel.Aop integrates Ray.Aop with Laravel.",
     "license": "MIT",
     "type": "library",
-    "version": "0.10.0",
     "keywords": [
         "laravel",
         "aop",
