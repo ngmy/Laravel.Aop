@@ -4,32 +4,34 @@ declare(strict_types=1);
 
 namespace Ngmy\LaravelAop\Tests\Feature\Aspects\Retry;
 
+use Ngmy\LaravelAop\Aspects\Retry\Attributes\RetryOnFailure;
+use Ngmy\LaravelAop\Aspects\Retry\Interceptors\RetryOnFailureInterceptor;
 use Ngmy\LaravelAop\Collections\InterceptMap;
 use Ngmy\LaravelAop\Tests\Feature\Aspects\Retry\stubs\Attributes\TestAttribute1;
 use Ngmy\LaravelAop\Tests\Feature\Aspects\Retry\stubs\Interceptors\TestInterceptor1;
 use Ngmy\LaravelAop\Tests\Feature\Aspects\Retry\stubs\Targets\TestTarget1;
 use Ngmy\LaravelAop\Tests\TestCase;
 use Ngmy\LaravelAop\Tests\utils\Spies\SpyLogger;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LogLevel;
 
 /**
  * @internal
  *
- * @covers \Ngmy\LaravelAop\Aspects\Retry\Attributes\RetryOnFailure
- * @covers \Ngmy\LaravelAop\Aspects\Retry\Interceptors\RetryOnFailureInterceptor
- *
  * @phpstan-type ExpectedLogs list<list{LogLevel::*, string}>
  */
+#[CoversClass(RetryOnFailure::class)]
+#[CoversClass(RetryOnFailureInterceptor::class)]
 final class RetryTest extends TestCase
 {
     /**
-     * @dataProvider provideRetryCases
-     *
      * @param class-string                  $targetClassName    The class name of the target
      * @param string                        $targetMethodName   The method name of the target
      * @param ExpectedLogs                  $expectedLogs       The expected logs
      * @param null|class-string<\Throwable> $exceptionClassName The exception class name
      */
+    #[DataProvider('provideRetryCases')]
     public function testRetry(
         string $targetClassName,
         string $targetMethodName,

@@ -7,15 +7,17 @@ namespace Ngmy\LaravelAop\Tests\Feature\Aspects\Transaction;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Ngmy\LaravelAop\Aspects\Transaction\Attributes\Transactional;
+use Ngmy\LaravelAop\Aspects\Transaction\Interceptors\TransactionalInterceptor;
 use Ngmy\LaravelAop\Tests\Feature\Aspects\Transaction\stubs\Targets\TestTarget1;
 use Ngmy\LaravelAop\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * @internal
- *
- * @covers \Ngmy\LaravelAop\Aspects\Transaction\Attributes\Transactional
- * @covers \Ngmy\LaravelAop\Aspects\Transaction\Interceptors\TransactionalInterceptor
  */
+#[CoversClass(Transactional::class)]
+#[CoversClass(TransactionalInterceptor::class)]
 final class TransactionTest extends TestCase
 {
     /**

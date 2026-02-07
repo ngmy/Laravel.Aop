@@ -4,18 +4,22 @@ declare(strict_types=1);
 
 namespace Ngmy\LaravelAop\Tests\Feature;
 
+use Ngmy\LaravelAop\Commands\WatchCommand;
+use Ngmy\LaravelAop\Factories\WatcherCallableFactory;
+use Ngmy\LaravelAop\ServiceProvider;
+use Ngmy\LaravelAop\Services\Watcher;
 use Ngmy\LaravelAop\Tests\TestCase;
 use Ngmy\LaravelAop\Tests\utils\Spies\SpyLogger;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Log\LogLevel;
 
 /**
  * @internal
- *
- * @covers \Ngmy\LaravelAop\Commands\WatchCommand
- * @covers \Ngmy\LaravelAop\Factories\WatcherCallableFactory
- * @covers \Ngmy\LaravelAop\ServiceProvider
- * @covers \Ngmy\LaravelAop\Services\Watcher
  */
+#[CoversClass(ServiceProvider::class)]
+#[CoversClass(WatchCommand::class)]
+#[CoversClass(Watcher::class)]
+#[CoversClass(WatcherCallableFactory::class)]
 final class WatcherTest extends TestCase
 {
     protected bool $compileAopClasses = false;

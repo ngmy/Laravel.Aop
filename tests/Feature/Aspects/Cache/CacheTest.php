@@ -4,19 +4,25 @@ declare(strict_types=1);
 
 namespace Ngmy\LaravelAop\Tests\Feature\Aspects\Cache;
 
+use Ngmy\LaravelAop\Aspects\Cache\Attributes\Cacheable;
+use Ngmy\LaravelAop\Aspects\Cache\Attributes\FlushAfter;
+use Ngmy\LaravelAop\Aspects\Cache\Attributes\FlushBefore;
+use Ngmy\LaravelAop\Aspects\Cache\Interceptors\CacheableInterceptor;
+use Ngmy\LaravelAop\Aspects\Cache\Interceptors\FlushAfterInterceptor;
+use Ngmy\LaravelAop\Aspects\Cache\Interceptors\FlushBeforeInterceptor;
 use Ngmy\LaravelAop\Tests\Feature\Aspects\Cache\stubs\Targets\TestTarget1;
 use Ngmy\LaravelAop\Tests\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * @internal
- *
- * @covers \Ngmy\LaravelAop\Aspects\Cache\Attributes\Cacheable
- * @covers \Ngmy\LaravelAop\Aspects\Cache\Attributes\FlushAfter
- * @covers \Ngmy\LaravelAop\Aspects\Cache\Attributes\FlushBefore
- * @covers \Ngmy\LaravelAop\Aspects\Cache\Interceptors\CacheableInterceptor
- * @covers \Ngmy\LaravelAop\Aspects\Cache\Interceptors\FlushAfterInterceptor
- * @covers \Ngmy\LaravelAop\Aspects\Cache\Interceptors\FlushBeforeInterceptor
  */
+#[CoversClass(Cacheable::class)]
+#[CoversClass(CacheableInterceptor::class)]
+#[CoversClass(FlushAfter::class)]
+#[CoversClass(FlushAfterInterceptor::class)]
+#[CoversClass(FlushBefore::class)]
+#[CoversClass(FlushBeforeInterceptor::class)]
 final class CacheTest extends TestCase
 {
     private TestTarget1 $target;

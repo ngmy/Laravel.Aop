@@ -5,7 +5,16 @@ declare(strict_types=1);
 namespace Ngmy\LaravelAop\Tests\Feature;
 
 use Illuminate\Support\Facades\File;
+use Ngmy\LaravelAop\Collections\AspectMap;
+use Ngmy\LaravelAop\Collections\InterceptMap;
+use Ngmy\LaravelAop\Collections\SourceMap;
+use Ngmy\LaravelAop\Commands\CompileCommand;
+use Ngmy\LaravelAop\Factories\AspectMapFactory;
+use Ngmy\LaravelAop\ServiceProvider;
+use Ngmy\LaravelAop\Services\ClassLoader;
+use Ngmy\LaravelAop\Services\Compiler;
 use Ngmy\LaravelAop\Services\ServiceRegistrar;
+use Ngmy\LaravelAop\Services\SourceMapFileManager;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Attributes\TestAttribute1;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Attributes\TestAttribute2;
 use Ngmy\LaravelAop\Tests\Feature\stubs\Attributes\TestAttribute3;
@@ -20,40 +29,46 @@ use Ngmy\LaravelAop\Tests\TestCase;
 use Ngmy\LaravelAop\Tests\utils\Attributes\DoesNotDeleteCompiledDirectoryAfter;
 use Ngmy\LaravelAop\Tests\utils\Attributes\DoesNotDeleteCompiledDirectoryBefore;
 use Ngmy\LaravelAop\Tests\utils\Spies\SpyLogger;
+use Ngmy\LaravelAop\ValueObjects\CompiledClass;
+use Ngmy\LaravelAop\ValueObjects\CompiledPath;
+use Ngmy\LaravelAop\ValueObjects\SourceMapFile;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use Psr\Log\LogLevel;
 
 /**
  * @internal
  *
- * @covers \Ngmy\LaravelAop\Collections\AspectMap
- * @covers \Ngmy\LaravelAop\Collections\InterceptMap
- * @covers \Ngmy\LaravelAop\Collections\SourceMap
- * @covers \Ngmy\LaravelAop\Commands\CompileCommand
- * @covers \Ngmy\LaravelAop\Factories\AspectMapFactory
- * @covers \Ngmy\LaravelAop\ServiceProvider
- * @covers \Ngmy\LaravelAop\Services\ClassLoader
- * @covers \Ngmy\LaravelAop\Services\Compiler
- * @covers \Ngmy\LaravelAop\Services\ServiceRegistrar
- * @covers \Ngmy\LaravelAop\Services\SourceMapFileManager
- * @covers \Ngmy\LaravelAop\ValueObjects\CompiledClass
- * @covers \Ngmy\LaravelAop\ValueObjects\CompiledPath
- * @covers \Ngmy\LaravelAop\ValueObjects\SourceMapFile
- *
  * @phpstan-type ExpectedLogs list<list{LogLevel::*, string}>
  */
+#[CoversClass(AspectMap::class)]
+#[CoversClass(AspectMapFactory::class)]
+#[CoversClass(ClassLoader::class)]
+#[CoversClass(CompileCommand::class)]
+#[CoversClass(CompiledClass::class)]
+#[CoversClass(CompiledPath::class)]
+#[CoversClass(Compiler::class)]
+#[CoversClass(InterceptMap::class)]
+#[CoversClass(ServiceProvider::class)]
+#[CoversClass(ServiceRegistrar::class)]
+#[CoversClass(SourceMap::class)]
+#[CoversClass(SourceMapFile::class)]
+#[CoversClass(SourceMapFileManager::class)]
 final class AopTest extends TestCase
 {
     protected bool $compileAopClasses = false;
 
     /**
-     * @dataProvider provideAopCases
-     *
      * @param class-string $targetClassName  The class name of the target
      * @param string       $targetMethodName The method name of the target
      * @param ExpectedLogs $expectedLogs     The expected logs
      * @param bool         $isFirst          Whether this is the first case
      */
+    #[DataProvider('provideAopCases')]
     #[DoesNotDeleteCompiledDirectoryAfter]
     #[DoesNotDeleteCompiledDirectoryBefore]
     public function testAopWhenCompiledClassesAreLoaded(
@@ -75,21 +90,17 @@ final class AopTest extends TestCase
     /**
      * This test is run in a separate process to test when compiled AOP classes are not loaded.
      *
-     * @dataProvider provideAopCases
-     *
-     * @runInSeparateProcess
-     *
-     * @preserveGlobalState disabled
-     *
-     * @depends testAopWhenCompiledClassesAreLoaded
-     *
      * @param class-string $targetClassName  The class name of the target
      * @param string       $targetMethodName The method name of the target
      * @param ExpectedLogs $expectedLogs     The expected logs
      * @param bool         $isLast           Whether this is the last case
      */
+    #[DataProvider('provideAopCases')]
     #[DoesNotDeleteCompiledDirectoryAfter]
     #[DoesNotDeleteCompiledDirectoryBefore]
+    #[Depends('testAopWhenCompiledClassesAreLoaded')]
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testAopWhenCompiledClassesAreNotLoaded(
         string $targetClassName,
         string $targetMethodName,

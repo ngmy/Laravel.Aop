@@ -7,26 +7,28 @@ namespace Ngmy\LaravelAop\Tests\Feature\Aspects\Logging;
 use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Ngmy\LaravelAop\Aspects\Logging\Attributes\ExceptionLogLevel;
+use Ngmy\LaravelAop\Aspects\Logging\Interceptors\ExceptionLogLevelInterceptor;
 use Ngmy\LaravelAop\Tests\Feature\Aspects\Logging\stubs\Targets\TestTarget1;
 use Ngmy\LaravelAop\Tests\TestCase;
 use NunoMaduro\Collision\Adapters\Laravel\ExceptionHandler as CollisionExceptionHandler;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LogLevel;
 
 /**
  * @internal
- *
- * @covers \Ngmy\LaravelAop\Aspects\Logging\Attributes\ExceptionLogLevel
- * @covers \Ngmy\LaravelAop\Aspects\Logging\Interceptors\ExceptionLogLevelInterceptor
  */
+#[CoversClass(ExceptionLogLevel::class)]
+#[CoversClass(ExceptionLogLevelInterceptor::class)]
 final class LoggingTest extends TestCase
 {
     /**
-     * @dataProvider provideExceptionLogLevelAttributeCases
-     *
      * @param class-string                                 $targetClassName   The class name of the target
      * @param string                                       $targetMethodName  The method name of the target
      * @param array<class-string<\Throwable>, LogLevel::*> $expectedLogLevels The expected log levels
      */
+    #[DataProvider('provideExceptionLogLevelAttributeCases')]
     public function testExceptionLogLevelAttributeWithLaravelExceptionHandler(
         string $targetClassName,
         string $targetMethodName,
@@ -36,12 +38,11 @@ final class LoggingTest extends TestCase
     }
 
     /**
-     * @dataProvider provideExceptionLogLevelAttributeCases
-     *
      * @param class-string                                 $targetClassName   The class name of the target
      * @param string                                       $targetMethodName  The method name of the target
      * @param array<class-string<\Throwable>, LogLevel::*> $expectedLogLevels The expected log levels
      */
+    #[DataProvider('provideExceptionLogLevelAttributeCases')]
     public function testExceptionLogLevelAttributeWithCollisionExceptionHandler(
         string $targetClassName,
         string $targetMethodName,
