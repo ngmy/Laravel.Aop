@@ -135,10 +135,8 @@
 
 
 
-
-
-
-
+    
+    
 <h3 id="toc">
     Table of Contents
     <a href="classes/Ngmy-LaravelAop-Aspects-Transaction-Interceptors-TransactionalInterceptor.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
@@ -215,7 +213,7 @@
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">invoke</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Ray\Aop\MethodInvocation">MethodInvocation</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$invocation</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">invoke</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type"><abbr title="\Ray\Aop\MethodInvocation">MethodInvocation</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$invocation</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -224,8 +222,8 @@
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$invocation</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Ray\Aop\MethodInvocation">MethodInvocation</abbr></span>
+                <span class="phpdocumentor-argument-list__argument__name">$invocation</span>
+                : <span class="phpdocumentor-argument-list__argument__type"><abbr title="\Ray\Aop\MethodInvocation">MethodInvocation</abbr></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                 
@@ -234,8 +232,8 @@
 
     
 
+        
     
-
     
 </article>
                     <article
@@ -260,7 +258,7 @@
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                    <span class="phpdocumentor-signature__name">executeInTransaction</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$callback</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/Ngmy-LaravelAop-Aspects-Transaction-Attributes-Transactional.html"><abbr title="\Ngmy\LaravelAop\Aspects\Transaction\Attributes\Transactional">Transactional</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$attribute</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">executeInTransaction</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type"><abbr title="\Closure">Closure</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$callback</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__type"><a href="classes/Ngmy-LaravelAop-Aspects-Transaction-Attributes-Transactional.html"><abbr title="\Ngmy\LaravelAop\Aspects\Transaction\Attributes\Transactional">Transactional</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$attribute</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -269,8 +267,8 @@
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$callback</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Closure">Closure</abbr></span>
+                <span class="phpdocumentor-argument-list__argument__name">$callback</span>
+                : <span class="phpdocumentor-argument-list__argument__type"><abbr title="\Closure">Closure</abbr></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The callback</p>
@@ -278,8 +276,8 @@
 
             </dd>
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$attribute</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/Ngmy-LaravelAop-Aspects-Transaction-Attributes-Transactional.html"><abbr title="\Ngmy\LaravelAop\Aspects\Transaction\Attributes\Transactional">Transactional</abbr></a></span>
+                <span class="phpdocumentor-argument-list__argument__name">$attribute</span>
+                : <span class="phpdocumentor-argument-list__argument__type"><a href="classes/Ngmy-LaravelAop-Aspects-Transaction-Attributes-Transactional.html"><abbr title="\Ngmy\LaravelAop\Aspects\Transaction\Attributes\Transactional">Transactional</abbr></a></span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>The attribute</p>
@@ -290,8 +288,8 @@
 
     
 
+        
     
-
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">mixed</span>
@@ -340,6 +338,8 @@
                         if (xhr.status < 400 && xhr.responseText) {
                             code.textContent = xhr.responseText;
                             Prism.highlightElement(code);
+                            d=document.getElementsByClassName("line-numbers");
+                            d[0].scrollTop = d[0].children[1].offsetTop;
                             return;
                         }
 
