@@ -1,5 +1,11 @@
 # Release Notes
 
+## [0.11.0](https://github.com/ngmy/Laravel.Aop/compare/0.10.0...0.11.0) - 2026-02-07
+
+- Add support for PHP 8.5. Drop support for PHP 8.1.
+- Add support for Laravel 12. Drop support for Laravel 10.
+- Update `ray/aop` requirement to `^2.19`.
+
 ## [0.10.0](https://github.com/ngmy/Laravel.Aop/compare/0.9.0...0.10.0) - 2025-02-26
 
 - Add compatibility with PHP 8.4. Drop compatibility with Laravel 9.
