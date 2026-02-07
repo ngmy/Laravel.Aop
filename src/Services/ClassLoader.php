@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Ngmy\LaravelAop\Services;
 
 use Ngmy\LaravelAop\ValueObjects\CompiledPath;
+use Ray\Aop\Weaver;
 
 final class ClassLoader
 {
@@ -22,7 +23,7 @@ final class ClassLoader
      *
      * @param class-string $className The class name
      *
-     * @see \Ray\Aop\Weaver::loadClass()
+     * @see Weaver::loadClass()
      */
     public function loadClass(string $className): void
     {

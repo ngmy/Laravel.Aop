@@ -21,7 +21,7 @@ final class Cacheable
      */
     public function __construct(
         public readonly string $key,
-        public readonly null|\DateInterval|\DateTimeInterface|int $ttl = null,
+        public readonly \DateInterval|\DateTimeInterface|int|null $ttl = null,
         public readonly ?string $store = null,
     ) {}
 }
