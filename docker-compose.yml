@@ -35,3 +35,16 @@ services:
     working_dir: /var/www
     profiles:
       - app-php84
+
+  app-php85:
+    build:
+      context: ./docker/php85
+      args:
+        UID: ${APP_UID}
+        GID: ${APP_GID}
+    tty: true
+    volumes:
+      - .:/var/www
+    working_dir: /var/www
+    profiles:
+      - app-php85
