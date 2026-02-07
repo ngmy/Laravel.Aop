@@ -196,17 +196,15 @@ final class AopTest extends TestCase
             ],
         ];
 
-        if (\PHP_VERSION_ID >= 80200) {
-            $data['target class is readonly'] = [
-                TestTarget2::class,
-                'method2',
-                [
-                    [LogLevel::INFO, \sprintf('Start %s', TestInterceptor1::class)],
-                    [LogLevel::INFO, \sprintf('%s::%s', TestTarget2::class, 'method2')],
-                    [LogLevel::INFO, \sprintf('End %s', TestInterceptor1::class)],
-                ],
-            ];
-        }
+        $data['target class is readonly'] = [
+            TestTarget2::class,
+            'method2',
+            [
+                [LogLevel::INFO, \sprintf('Start %s', TestInterceptor1::class)],
+                [LogLevel::INFO, \sprintf('%s::%s', TestTarget2::class, 'method2')],
+                [LogLevel::INFO, \sprintf('End %s', TestInterceptor1::class)],
+            ],
+        ];
 
         foreach ($data as $key => $value) {
             $data[$key][] = array_key_first($data) === $key;
