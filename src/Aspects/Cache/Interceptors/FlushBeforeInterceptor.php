@@ -11,6 +11,7 @@ use Ray\Aop\MethodInvocation;
 
 final class FlushBeforeInterceptor implements MethodInterceptor
 {
+    #[\Override]
     public function invoke(MethodInvocation $invocation): mixed
     {
         $attribute = $invocation->getMethod()->getAttributes(FlushBefore::class)[0]->newInstance();

@@ -13,6 +13,7 @@ use Ray\Aop\WeavedInterface;
 
 final class RetryOnFailureInterceptor implements MethodInterceptor
 {
+    #[\Override]
     public function invoke(MethodInvocation $invocation): mixed
     {
         $attribute = $invocation->getMethod()->getAttributes(RetryOnFailure::class)[0];

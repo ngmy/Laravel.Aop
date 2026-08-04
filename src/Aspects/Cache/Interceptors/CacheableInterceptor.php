@@ -11,6 +11,7 @@ use Ray\Aop\MethodInvocation;
 
 final class CacheableInterceptor implements MethodInterceptor
 {
+    #[\Override]
     public function invoke(MethodInvocation $invocation): mixed
     {
         $attribute = $invocation->getMethod()->getAttributes(Cacheable::class)[0]->newInstance();

@@ -10,6 +10,7 @@ use Ray\Aop\MethodInvocation;
 
 final class TestInterceptor2 implements MethodInterceptor
 {
+    #[\Override]
     public function invoke(MethodInvocation $invocation): mixed
     {
         Log::info(\sprintf('Start %s', __CLASS__));

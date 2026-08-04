@@ -11,6 +11,7 @@ use Ray\Aop\MethodInvocation;
 
 final class TestInterceptor3 implements MethodInterceptor
 {
+    #[\Override]
     public function invoke(MethodInvocation $invocation): mixed
     {
         $attributes = $invocation->getMethod()->getAttributes(TestAttribute5::class);

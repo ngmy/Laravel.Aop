@@ -14,6 +14,7 @@ use Ray\Aop\MethodInvocation;
 
 final class ExceptionLogLevelInterceptor implements MethodInterceptor
 {
+    #[\Override]
     public function invoke(MethodInvocation $invocation): mixed
     {
         $attributes = $invocation->getMethod()->getAttributes(ExceptionLogLevel::class);

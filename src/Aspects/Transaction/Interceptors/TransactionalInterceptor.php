@@ -12,6 +12,7 @@ use Ray\Aop\MethodInvocation;
 
 final class TransactionalInterceptor implements MethodInterceptor
 {
+    #[\Override]
     public function invoke(MethodInvocation $invocation): mixed
     {
         $attributes = $invocation->getMethod()->getAttributes(Transactional::class);
