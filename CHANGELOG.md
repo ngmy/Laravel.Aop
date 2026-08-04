@@ -1,5 +1,12 @@
 # Release Notes
 
+## [0.12.0](https://github.com/ngmy/Laravel.Aop/compare/0.11.0...0.12.0) - 2026-08-05
+
+- Add support for Laravel 13. Drop support for Laravel 11.
+- Update `ray/aop` requirement to `^2.20`.
+- Refactor the `RetryOnFailureInterceptor` class to be stateless and standardize AOP chaining.
+- Surface a clear error, instead of crashing, when the source map file is corrupted or unreadable.
+
 ## [0.11.0](https://github.com/ngmy/Laravel.Aop/compare/0.10.0...0.11.0) - 2026-02-07
 
 - Add support for PHP 8.5. Drop support for PHP 8.1.
