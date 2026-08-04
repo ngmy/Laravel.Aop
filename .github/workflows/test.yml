@@ -35,6 +35,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
+          ini-file: development
+          ini-values: disable_functions=""
           coverage: xdebug
 
       - name: Update Composer to latest version
