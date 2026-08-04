@@ -19,7 +19,7 @@
         "php": "^8.2",
         "laravel/framework": "^11.0 || ^12.0 || ^13.0",
         "olvlvl/composer-attribute-collector": "^2.1",
-        "ray/aop": "^2.19",
+        "ray/aop": "^2.20",
         "spatie/file-system-watcher": "^1.2",
         "symfony/finder": "^7.0"
     },
