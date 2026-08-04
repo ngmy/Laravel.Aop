@@ -73,6 +73,14 @@ class Transactional implements MethodInterceptor
 > [!TIP]
 > Please see the [Ray.Aop documentation](https://github.com/ray-di/Ray.Aop) to learn more about the interceptor.
 
+> [!IMPORTANT]
+> An interceptor's constructor is called only once, when the AOP classes are compiled, and that instance is shared
+> within the same process (effectively a singleton). Therefore, if you want to make an interceptor stateful, be aware
+> that its state becomes global and is shared within the process. Also, an interceptor cannot hold a `Closure`, a
+> PDO-related object, or a resource (e.g., a file handle) as a property. For a `Closure` or a PDO-related object, an
+> error occurs at compile time. For a resource, be especially careful, since no error occurs at compile time — the
+> resource is simply lost.
+
 Then, you should register the attribute and the interceptor in the `intercept` configuration option of the
 `config/aop.php` configuration file.
 For example, let's register the `Transactional` attribute and the `TransactionalInterceptor` interceptor:
