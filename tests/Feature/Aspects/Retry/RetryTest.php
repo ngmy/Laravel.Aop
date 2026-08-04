@@ -198,7 +198,7 @@ final class RetryTest extends TestCase
             (new \ReflectionMethod(TestTarget1::class, 'fail1'))->getClosure($target),
         );
 
-        // This interceptor was never bound to the target, so it cannot be located in $bindings['fail1']
+        // This interceptor was never bound to the target, so it cannot be located in $bindings['fail1'].
         $interceptor = new RetryOnFailureInterceptor();
         $innerChain = new \ReflectionMethod($interceptor, 'innerChain');
 

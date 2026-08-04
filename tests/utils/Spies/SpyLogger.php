@@ -30,7 +30,7 @@ final class SpyLogger
      */
     public function use(): self
     {
-        // Log::spy() cannot be used in the test of the order of logs, so use a custom spy logger
+        // Log::spy() cannot be used in the test of the order of logs, so use a custom spy logger.
         Log::swap($this);
 
         return $this;

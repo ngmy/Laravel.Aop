@@ -227,7 +227,7 @@ final class AopTest extends TestCase
 
     public function testCompileCommandWhenCompiledFilesExist(): void
     {
-        // Create dummy compiled files
+        // Create dummy compiled files.
         File::makeDirectory($this->compiledPath, 0o755, true, true);
         File::put($this->compiledPath.'/source_map.ser', '');
         File::put($this->compiledPath.'/Ngmy_LaravelAop_Tests_Feature_stubs_Targets_TestTarget1_3064002867.php', '');
@@ -323,7 +323,7 @@ final class AopTest extends TestCase
 
         $sourceMapFile = new SourceMapFile(new CompiledPath($this->compiledPath));
 
-        // Make the destination path an existing directory so that renaming the temporary file onto it fails
+        // Make the destination path an existing directory so that renaming the temporary file onto it fails.
         File::makeDirectory($sourceMapFile->getPathname());
 
         try {
@@ -331,7 +331,7 @@ final class AopTest extends TestCase
 
             self::fail('An exception was expected to be thrown.');
         } catch (\Throwable) {
-            // Expected: the underlying write/rename failure is expected to propagate
+            // Expected: the underlying write/rename failure is expected to propagate.
         }
 
         self::assertSame([], File::glob($this->compiledPath.'/*.tmp'));
@@ -372,13 +372,13 @@ final class AopTest extends TestCase
         string $targetMethodName,
         array $expectedLogs,
     ): void {
-        // Bind the services to the container
+        // Bind the services to the container.
         $serviceRegistrar = $this->app->make(ServiceRegistrar::class);
         $serviceRegistrar->bind();
 
         $spyLogger = (new SpyLogger())->use();
 
-        // Call the target method
+        // Call the target method.
 
         $target = $this->app->make($targetClassName);
         $target->{$targetMethodName}();

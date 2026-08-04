@@ -91,7 +91,7 @@ final class RetryOnFailureInterceptor implements MethodInterceptor
         $indexes = array_keys($interceptors, $this, true);
 
         // Must appear exactly once. Zero means the chain is not what we assume;
-        // more than one means array_keys() cannot tell which position is ours
+        // more than one means array_keys() cannot tell which position is ours.
         if (1 !== \count($indexes)) {
             throw new \LogicException(\sprintf(
                 'Cannot determine the position of %s in the interceptor chain of %s::%s().',
@@ -130,7 +130,7 @@ final class RetryOnFailureInterceptor implements MethodInterceptor
             return $bindings;
         }
 
-        // Readonly classes keep their bindings in a private `_state` property
+        // Readonly classes keep their bindings in a private `_state` property.
         $state = (new \ReflectionProperty($object, '_state'))->getValue($object);
         \assert($state instanceof InterceptTraitState);
 
