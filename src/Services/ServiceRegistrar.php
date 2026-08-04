@@ -58,7 +58,7 @@ final class ServiceRegistrar
      */
     private function getSourceMap(): SourceMap
     {
-        if (!$this->sourceMapFile->isReadable()) {
+        if (!$this->sourceMapFile->isFile()) {
             return SourceMap::empty();
         }
 
