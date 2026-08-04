@@ -176,25 +176,15 @@ Search.appendIndex(
             "summary": "Retry\u0020an\u0020operation\u0020a\u0020given\u0020number\u0020of\u0020times.",
             "url": "classes/Ngmy-LaravelAop-Aspects-Retry-Interceptors-RetryOnFailureInterceptor.html#method_retry"
         },                {
-            "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Retry\\Interceptors\\RetryOnFailureInterceptor\u003A\u003A\u0024attempts",
-            "name": "attempts",
-            "summary": "The\u0020number\u0020of\u0020attempts\u0020made\u0020so\u0020far.",
-            "url": "classes/Ngmy-LaravelAop-Aspects-Retry-Interceptors-RetryOnFailureInterceptor.html#property_attempts"
+            "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Retry\\Interceptors\\RetryOnFailureInterceptor\u003A\u003AinnerChain\u0028\u0029",
+            "name": "innerChain",
+            "summary": "Build\u0020a\u0020callable\u0020that\u0020re\u002Dexecutes\u0020only\u0020the\u0020interceptors\u0020inside\u0020this\u0020one.",
+            "url": "classes/Ngmy-LaravelAop-Aspects-Retry-Interceptors-RetryOnFailureInterceptor.html#method_innerChain"
         },                {
-            "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Retry\\Interceptors\\RetryOnFailureInterceptor\u003A\u003A\u0024backoff",
-            "name": "backoff",
-            "summary": "The\u0020backoff\u0020strategy.",
-            "url": "classes/Ngmy-LaravelAop-Aspects-Retry-Interceptors-RetryOnFailureInterceptor.html#property_backoff"
-        },                {
-            "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Retry\\Interceptors\\RetryOnFailureInterceptor\u003A\u003A\u0024times",
-            "name": "times",
-            "summary": "The\u0020number\u0020of\u0020times\u0020to\u0020retry.",
-            "url": "classes/Ngmy-LaravelAop-Aspects-Retry-Interceptors-RetryOnFailureInterceptor.html#property_times"
-        },                {
-            "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Retry\\Interceptors\\RetryOnFailureInterceptor\u003A\u003A\u0024initialized",
-            "name": "initialized",
-            "summary": "Whether\u0020the\u0020interceptor\u0020has\u0020been\u0020initialized.",
-            "url": "classes/Ngmy-LaravelAop-Aspects-Retry-Interceptors-RetryOnFailureInterceptor.html#property_initialized"
+            "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Retry\\Interceptors\\RetryOnFailureInterceptor\u003A\u003Abindings\u0028\u0029",
+            "name": "bindings",
+            "summary": "Get\u0020the\u0020interceptor\u0020bindings\u0020of\u0020a\u0020weaved\u0020object.",
+            "url": "classes/Ngmy-LaravelAop-Aspects-Retry-Interceptors-RetryOnFailureInterceptor.html#method_bindings"
         },                {
             "fqsen": "\\Ngmy\\LaravelAop\\Aspects\\Transaction\\Attributes\\Transactional",
             "name": "Transactional",
