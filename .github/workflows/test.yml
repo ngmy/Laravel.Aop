@@ -18,6 +18,7 @@ jobs:
         laravel:
           - 11
           - 12
+          - 13
     name: PHP ${{ matrix.php }} + Laravel ${{ matrix.laravel }}
     steps:
       - name: Checkout
@@ -43,14 +44,14 @@ jobs:
 
       - name: Run tests
         run: |
-          if [[ "${{ matrix.php }}" == '8.5' && "${{ matrix.laravel }}" == 12 ]]; then
+          if [[ "${{ matrix.php }}" == '8.5' && "${{ matrix.laravel }}" == 13 ]]; then
             composer test-coverage
           else
             composer test
           fi
 
       - name: Upload coverage results to Coveralls
-        if: matrix.php == '8.5' && matrix.laravel == 12
+        if: matrix.php == '8.5' && matrix.laravel == 13
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         uses: nick-fields/retry@v3
