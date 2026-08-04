@@ -12,8 +12,8 @@ readonly class TestTarget2
     #[RetryOnFailure(3, 100)]
     public function fail1(): void
     {
-        Log::info('Executing...');
+        Log::info(\sprintf('%s started.', __METHOD__));
 
-        throw new \Exception('Failed');
+        throw new \Exception(\sprintf('%s failed.', __METHOD__));
     }
 }

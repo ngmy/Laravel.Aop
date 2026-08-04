@@ -13,58 +13,58 @@ class TestTarget1
     #[RetryOnFailure(3, 100)]
     public function succeed(): void
     {
-        Log::info('Executing...');
+        Log::info(\sprintf('%s started.', __METHOD__));
 
-        Log::info('Succeeded');
+        Log::info(\sprintf('%s succeeded.', __METHOD__));
     }
 
     #[RetryOnFailure(3, 100)]
     public function fail1(): void
     {
-        Log::info('Executing...');
+        Log::info(\sprintf('%s started.', __METHOD__));
 
-        throw new \Exception('Failed');
+        throw new \Exception(\sprintf('%s failed.', __METHOD__));
     }
 
     #[RetryOnFailure([100, 200])]
     public function fail2(): void
     {
-        Log::info('Executing...');
+        Log::info(\sprintf('%s started.', __METHOD__));
 
-        throw new \Exception('Failed');
+        throw new \Exception(\sprintf('%s failed.', __METHOD__));
     }
 
     #[RetryOnFailure(3, 100, [\Exception::class])]
     public function fail3(): void
     {
-        Log::info('Executing...');
+        Log::info(\sprintf('%s started.', __METHOD__));
 
-        throw new \Exception('Failed');
+        throw new \Exception(\sprintf('%s failed.', __METHOD__));
     }
 
     #[RetryOnFailure(3, 100, [\RuntimeException::class])]
     public function fail4(): void
     {
-        Log::info('Executing...');
+        Log::info(\sprintf('%s started.', __METHOD__));
 
-        throw new \Exception('Failed');
+        throw new \Exception(\sprintf('%s failed.', __METHOD__));
     }
 
     #[TestAttribute1]
     #[RetryOnFailure(3, 100)]
     public function fail5(): void
     {
-        Log::info('Executing...');
+        Log::info(\sprintf('%s started.', __METHOD__));
 
-        throw new \Exception('Failed');
+        throw new \Exception(\sprintf('%s failed.', __METHOD__));
     }
 
     #[RetryOnFailure(3, 100)]
     #[TestAttribute1]
     public function fail6(): void
     {
-        Log::info('Executing...');
+        Log::info(\sprintf('%s started.', __METHOD__));
 
-        throw new \Exception('Failed');
+        throw new \Exception(\sprintf('%s failed.', __METHOD__));
     }
 }

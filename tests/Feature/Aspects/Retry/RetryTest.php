@@ -30,17 +30,17 @@ use Ray\Aop\WeavedInterface;
 final class RetryTest extends TestCase
 {
     /**
-     * @param class-string                  $targetClassName    The class name of the target
-     * @param string                        $targetMethodName   The method name of the target
-     * @param ExpectedLogs                  $expectedLogs       The expected logs
-     * @param null|class-string<\Throwable> $exceptionClassName The exception class name
+     * @param class-string    $targetClassName   The class name of the target
+     * @param string          $targetMethodName  The method name of the target
+     * @param ExpectedLogs    $expectedLogs      The expected logs
+     * @param null|\Throwable $expectedException The expected exception
      */
     #[DataProvider('provideRetryCases')]
     public function testRetry(
         string $targetClassName,
         string $targetMethodName,
         array $expectedLogs,
-        ?string $exceptionClassName,
+        ?\Throwable $expectedException = null,
     ): void {
         $target = $this->app->make($targetClassName);
 
@@ -49,10 +49,11 @@ final class RetryTest extends TestCase
         try {
             $target->{$targetMethodName}();
         } catch (\Throwable $e) {
-            if (null === $exceptionClassName) {
+            if (null === $expectedException) {
                 self::fail('An exception was thrown unexpectedly.');
             }
-            self::assertInstanceOf($exceptionClassName, $e);
+            self::assertInstanceOf($expectedException::class, $e);
+            self::assertSame($expectedException->getMessage(), $e->getMessage());
         } finally {
             self::assertLogCalls($expectedLogs, $spyLogger);
         }
@@ -68,8 +69,8 @@ final class RetryTest extends TestCase
                 TestTarget1::class,
                 'succeed',
                 [
-                    [LogLevel::INFO, 'Executing...'],
-                    [LogLevel::INFO, 'Succeeded'],
+                    [LogLevel::INFO, \sprintf('%s started.', TestTarget1::class.'::succeed')],
+                    [LogLevel::INFO, \sprintf('%s succeeded.', TestTarget1::class.'::succeed')],
                 ],
                 null,
             ],
@@ -77,67 +78,67 @@ final class RetryTest extends TestCase
                 TestTarget1::class,
                 'fail1',
                 [
-                    [LogLevel::INFO, 'Executing...'],
-                    [LogLevel::INFO, 'Executing...'],
-                    [LogLevel::INFO, 'Executing...'],
+                    [LogLevel::INFO, \sprintf('%s started.', TestTarget1::class.'::fail1')],
+                    [LogLevel::INFO, \sprintf('%s started.', TestTarget1::class.'::fail1')],
+                    [LogLevel::INFO, \sprintf('%s started.', TestTarget1::class.'::fail1')],
                 ],
-                \Exception::class,
+                new \Exception(\sprintf('%s failed.', TestTarget1::class.'::fail1')),
             ],
             'retry on failure with backoff' => [
                 TestTarget1::class,
                 'fail2',
                 [
-                    [LogLevel::INFO, 'Executing...'],
-                    [LogLevel::INFO, 'Executing...'],
-                    [LogLevel::INFO, 'Executing...'],
+                    [LogLevel::INFO, \sprintf('%s started.', TestTarget1::class.'::fail2')],
+                    [LogLevel::INFO, \sprintf('%s started.', TestTarget1::class.'::fail2')],
+                    [LogLevel::INFO, \sprintf('%s started.', TestTarget1::class.'::fail2')],
                 ],
-                \Exception::class,
+                new \Exception(\sprintf('%s failed.', TestTarget1::class.'::fail2')),
             ],
             'retry on failure if exception to retry is matched' => [
                 TestTarget1::class,
                 'fail3',
                 [
-                    [LogLevel::INFO, 'Executing...'],
-                    [LogLevel::INFO, 'Executing...'],
-                    [LogLevel::INFO, 'Executing...'],
+                    [LogLevel::INFO, \sprintf('%s started.', TestTarget1::class.'::fail3')],
+                    [LogLevel::INFO, \sprintf('%s started.', TestTarget1::class.'::fail3')],
+                    [LogLevel::INFO, \sprintf('%s started.', TestTarget1::class.'::fail3')],
                 ],
-                \Exception::class,
+                new \Exception(\sprintf('%s failed.', TestTarget1::class.'::fail3')),
             ],
             'no retry on failure if exception to retry is not matched' => [
                 TestTarget1::class,
                 'fail4',
                 [
-                    [LogLevel::INFO, 'Executing...'],
+                    [LogLevel::INFO, \sprintf('%s started.', TestTarget1::class.'::fail4')],
                 ],
-                \Exception::class,
+                new \Exception(\sprintf('%s failed.', TestTarget1::class.'::fail4')),
             ],
-            'retry on failure with other attribute 1' => [
+            'retry on failure with higher attribute' => [
                 TestTarget1::class,
                 'fail5',
                 [
-                    [LogLevel::INFO, \sprintf('Start %s', TestInterceptor1::class)],
-                    [LogLevel::INFO, 'Executing...'],
-                    [LogLevel::INFO, 'Executing...'],
-                    [LogLevel::INFO, 'Executing...'],
-                    [LogLevel::INFO, \sprintf('End %s', TestInterceptor1::class)],
+                    [LogLevel::INFO, \sprintf('%s started.', TestInterceptor1::class.'::invoke')],
+                    [LogLevel::INFO, \sprintf('%s started.', TestTarget1::class.'::fail5')],
+                    [LogLevel::INFO, \sprintf('%s started.', TestTarget1::class.'::fail5')],
+                    [LogLevel::INFO, \sprintf('%s started.', TestTarget1::class.'::fail5')],
+                    [LogLevel::INFO, \sprintf('%s finished.', TestInterceptor1::class.'::invoke')],
                 ],
-                \Exception::class,
+                new \Exception(\sprintf('%s failed.', TestTarget1::class.'::fail5')),
             ],
-            'retry on failure with other attribute 2' => [
+            'retry on failure with lower attribute' => [
                 TestTarget1::class,
                 'fail6',
                 [
-                    [LogLevel::INFO, \sprintf('Start %s', TestInterceptor1::class)],
-                    [LogLevel::INFO, 'Executing...'],
-                    [LogLevel::INFO, \sprintf('End %s', TestInterceptor1::class)],
-                    [LogLevel::INFO, \sprintf('Start %s', TestInterceptor1::class)],
-                    [LogLevel::INFO, 'Executing...'],
-                    [LogLevel::INFO, \sprintf('End %s', TestInterceptor1::class)],
-                    [LogLevel::INFO, \sprintf('Start %s', TestInterceptor1::class)],
-                    [LogLevel::INFO, 'Executing...'],
-                    [LogLevel::INFO, \sprintf('End %s', TestInterceptor1::class)],
+                    [LogLevel::INFO, \sprintf('%s started.', TestInterceptor1::class.'::invoke')],
+                    [LogLevel::INFO, \sprintf('%s started.', TestTarget1::class.'::fail6')],
+                    [LogLevel::INFO, \sprintf('%s finished.', TestInterceptor1::class.'::invoke')],
+                    [LogLevel::INFO, \sprintf('%s started.', TestInterceptor1::class.'::invoke')],
+                    [LogLevel::INFO, \sprintf('%s started.', TestTarget1::class.'::fail6')],
+                    [LogLevel::INFO, \sprintf('%s finished.', TestInterceptor1::class.'::invoke')],
+                    [LogLevel::INFO, \sprintf('%s started.', TestInterceptor1::class.'::invoke')],
+                    [LogLevel::INFO, \sprintf('%s started.', TestTarget1::class.'::fail6')],
+                    [LogLevel::INFO, \sprintf('%s finished.', TestInterceptor1::class.'::invoke')],
                 ],
-                \Exception::class,
+                new \Exception(\sprintf('%s failed.', TestTarget1::class.'::fail6')),
             ],
         ];
     }

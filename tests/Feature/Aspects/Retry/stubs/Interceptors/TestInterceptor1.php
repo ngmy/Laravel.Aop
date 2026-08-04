@@ -12,12 +12,12 @@ final class TestInterceptor1 implements MethodInterceptor
 {
     public function invoke(MethodInvocation $invocation): mixed
     {
-        Log::info(\sprintf('Start %s', __CLASS__));
+        Log::info(\sprintf('%s started.', __METHOD__));
 
         try {
             $result = $invocation->proceed();
         } finally {
-            Log::info(\sprintf('End %s', __CLASS__));
+            Log::info(\sprintf('%s finished.', __METHOD__));
         }
 
         return $result;
