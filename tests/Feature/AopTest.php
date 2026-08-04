@@ -242,6 +242,101 @@ final class AopTest extends TestCase
         $serviceRegistrar->bind();
     }
 
+    /**
+     * @param string $contents The source map file contents
+     */
+    #[DataProvider('provideInvalidSourceMapFileContents')]
+    public function testGetThrowsExceptionWhenSourceMapFileDoesNotContainAValidSourceMap(string $contents): void
+    {
+        File::makeDirectory($this->compiledPath, 0o755, true, true);
+        File::put($this->compiledPath.'/source_map.ser', $contents);
+
+        $sourceMapFile = new SourceMapFile(new CompiledPath($this->compiledPath));
+
+        try {
+            (new SourceMapFileManager())->get($sourceMapFile);
+
+            self::fail('An exception was expected to be thrown.');
+        } catch (\RuntimeException $e) {
+            self::assertSame(
+                \sprintf(
+                    'The source map file "%s" does not contain a valid source map; run "php artisan aop:compile" to regenerate it.',
+                    $sourceMapFile->getPathname(),
+                ),
+                $e->getMessage(),
+            );
+            self::assertNull($e->getPrevious());
+        }
+    }
+
+    /**
+     * @return iterable<string, list{string}> The source map file contents that do not represent a valid source map
+     */
+    public static function provideInvalidSourceMapFileContents(): iterable
+    {
+        return [
+            'empty file' => [''],
+            'valid but wrong type' => [serialize('not a source map')],
+        ];
+    }
+
+    public function testGetThrowsExceptionWhenSourceMapFileCannotBeUnserialized(): void
+    {
+        File::makeDirectory($this->compiledPath, 0o755, true, true);
+        File::put($this->compiledPath.'/source_map.ser', 'not a valid serialized source map');
+
+        $sourceMapFile = new SourceMapFile(new CompiledPath($this->compiledPath));
+
+        try {
+            (new SourceMapFileManager())->get($sourceMapFile);
+
+            self::fail('An exception was expected to be thrown.');
+        } catch (\RuntimeException $e) {
+            self::assertSame(
+                \sprintf(
+                    'Failed to unserialize the source map file "%s". It may be corrupted; run "php artisan aop:compile" to regenerate it.',
+                    $sourceMapFile->getPathname(),
+                ),
+                $e->getMessage(),
+            );
+            self::assertInstanceOf(\ErrorException::class, $e->getPrevious());
+        }
+    }
+
+    public function testPutWritesSourceMapFileAtomicallyWithoutLeavingTemporaryFile(): void
+    {
+        File::makeDirectory($this->compiledPath, 0o755, true, true);
+
+        $sourceMapFile = new SourceMapFile(new CompiledPath($this->compiledPath));
+        $sourceMapFileManager = new SourceMapFileManager();
+
+        $sourceMapFileManager->put($sourceMapFile, SourceMap::empty());
+
+        self::assertFileExists($sourceMapFile->getPathname());
+        self::assertSame([], File::glob($this->compiledPath.'/*.tmp'));
+        self::assertSame([], $sourceMapFileManager->get($sourceMapFile)->all());
+    }
+
+    public function testPutCleansUpTemporaryFileWhenWriteFails(): void
+    {
+        File::makeDirectory($this->compiledPath, 0o755, true, true);
+
+        $sourceMapFile = new SourceMapFile(new CompiledPath($this->compiledPath));
+
+        // Make the destination path an existing directory so that renaming the temporary file onto it fails
+        File::makeDirectory($sourceMapFile->getPathname());
+
+        try {
+            (new SourceMapFileManager())->put($sourceMapFile, SourceMap::empty());
+
+            self::fail('An exception was expected to be thrown.');
+        } catch (\Throwable) {
+            // Expected: the underlying write/rename failure is expected to propagate
+        }
+
+        self::assertSame([], File::glob($this->compiledPath.'/*.tmp'));
+    }
+
     protected function resolveApplicationConfiguration($app): void
     {
         parent::resolveApplicationConfiguration($app);

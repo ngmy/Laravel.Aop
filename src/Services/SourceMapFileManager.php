@@ -21,8 +21,21 @@ final class SourceMapFileManager
     {
         $contents = File::get($sourceMapFile->getPathname());
 
-        /** @var SourceMap $sourceMap */
-        $sourceMap = unserialize($contents);
+        try {
+            $sourceMap = unserialize($contents);
+        } catch (\ErrorException $e) {
+            throw new \RuntimeException(\sprintf(
+                'Failed to unserialize the source map file "%s". It may be corrupted; run "php artisan aop:compile" to regenerate it.',
+                $sourceMapFile->getPathname(),
+            ), previous: $e);
+        }
+
+        if (!$sourceMap instanceof SourceMap) {
+            throw new \RuntimeException(\sprintf(
+                'The source map file "%s" does not contain a valid source map; run "php artisan aop:compile" to regenerate it.',
+                $sourceMapFile->getPathname(),
+            ));
+        }
 
         return $sourceMap;
     }
@@ -30,13 +43,23 @@ final class SourceMapFileManager
     /**
      * Write the source map to the source map file.
      *
+     * The write is performed atomically by writing to a temporary file first and then renaming it into place, so
+     * that a process interrupted mid-write can never leave a corrupted source map file behind.
+     *
      * @param SourceMapFile $sourceMapFile The source map file
      * @param SourceMap     $sourceMap     The source map
      */
     public function put(SourceMapFile $sourceMapFile, SourceMap $sourceMap): void
     {
         $contents = serialize($sourceMap);
+        $pathName = $sourceMapFile->getPathname();
+        $tempPathName = $pathName.'.'.uniqid('', true).'.tmp';
 
-        File::put($sourceMapFile->getPathname(), $contents);
+        try {
+            File::put($tempPathName, $contents);
+            File::move($tempPathName, $pathName);
+        } finally {
+            File::delete($tempPathName);
+        }
     }
 }
