@@ -23,45 +23,71 @@ final class AspectMapFactory
      */
     public function fromInterceptMap(InterceptMap $intercept): AspectMap
     {
+        /** @var Collection<class-string, Pointcut> $initialPointcuts */
+        $initialPointcuts = collect();
+
+        /** @var Collection<class-string, Pointcut> $pointcuts */
         $pointcuts = $intercept
-            ->reduce(static function (Collection $carry, array $interceptorClassNames, string $attributeClassName): Collection {
-                $pointcut = new Pointcut(
-                    (new Matcher())->any(),
-                    (new Matcher())->annotatedWith($attributeClassName),
-                    array_map(static function (string $interceptorClassName): object {
-                        /** @var MethodInterceptor $interceptor */
-                        $interceptor = App::make($interceptorClassName);
+            ->reduce(
+                /**
+                 * @param Collection<class-string, Pointcut> $carry
+                 *
+                 * @return Collection<class-string, Pointcut>
+                 */
+                static function (Collection $carry, array $interceptorClassNames, string $attributeClassName): Collection {
+                    $pointcut = new Pointcut(
+                        (new Matcher())->any(),
+                        (new Matcher())->annotatedWith($attributeClassName),
+                        array_map(static function (string $interceptorClassName): object {
+                            /** @var MethodInterceptor $interceptor */
+                            $interceptor = App::make($interceptorClassName);
 
-                        return $interceptor;
-                    }, $interceptorClassNames),
-                );
+                            return $interceptor;
+                        }, $interceptorClassNames),
+                    );
 
-                /** @var Collection<class-string, Pointcut> $carry */
-                $carry = $carry->put($attributeClassName, $pointcut);
-
-                return $carry;
-            }, collect())
+                    return $carry->put($attributeClassName, $pointcut);
+                },
+                $initialPointcuts,
+            )
         ;
 
         $aspectMap = AspectMap::empty();
 
-        $targetClassNames = $intercept
-            ->reduce(static function (Collection $carry, array $_, string $attributeClassName): Collection {
+        /** @var Collection<int, TargetMethod<object>> $initialTargets */
+        $initialTargets = collect();
+
+        /** @var Collection<int, TargetMethod<object>> $targets */
+        $targets = $intercept->reduce(
+            /**
+             * @param Collection<int, TargetMethod<object>> $carry
+             *
+             * @return Collection<int, TargetMethod<object>>
+             */
+            static function (Collection $carry, array $_, string $attributeClassName): Collection {
                 $predicate = Attributes::predicateForAttributeInstanceOf($attributeClassName);
-                $targets = Attributes::filterTargetMethods($predicate);
 
-                /** @var Collection<int, TargetMethod<object>> $carry */
-                $carry = $carry->merge($targets);
+                /** @var list<TargetMethod<object>> $methods */
+                $methods = Attributes::filterTargetMethods($predicate);
 
-                return $carry;
-            }, collect())
-            ->reduce(static function (Collection $carry, TargetMethod $method): Collection {
-                /** @var Collection<class-string, bool> $carry */
-                $carry = $carry->put($method->class, true);
+                return $carry->merge($methods);
+            },
+            $initialTargets,
+        );
 
-                return $carry;
-            }, collect())
-        ;
+        /** @var Collection<class-string, bool> $initialTargetClassNames */
+        $initialTargetClassNames = collect();
+
+        /** @var Collection<class-string, bool> $targetClassNames */
+        $targetClassNames = $targets->reduce(
+            /**
+             * @param Collection<class-string, bool> $carry
+             *
+             * @return Collection<class-string, bool>
+             */
+            static fn (Collection $carry, TargetMethod $method): Collection => $carry->put($method->class, true),
+            $initialTargetClassNames,
+        );
 
         foreach ($targetClassNames as $targetClassName => $_) {
             $aspectMap->put($targetClassName, $pointcuts->all());
