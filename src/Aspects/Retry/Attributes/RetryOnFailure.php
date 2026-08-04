@@ -9,6 +9,10 @@ namespace Ngmy\LaravelAop\Aspects\Retry\Attributes;
  *
  * Annotate your methods with the `RetryOnFailure` attribute and, in case of exception in the method, its execution will
  * be repeated a few times.
+ *
+ * When combined with other AOP attributes on the same method, only the interceptor for an attribute inside (declared
+ * below) this attribute is re-executed on each retry; the interceptor for an attribute outside (declared above) this
+ * attribute is not.
  */
 #[\Attribute(\Attribute::TARGET_METHOD)]
 final class RetryOnFailure
