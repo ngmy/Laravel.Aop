@@ -67,4 +67,37 @@ class TestTarget1
 
         throw new \Exception(\sprintf('%s failed.', __METHOD__));
     }
+
+    #[RetryOnFailure(3, 100)]
+    public function fail7(): void
+    {
+        Log::info(\sprintf('%s started.', __METHOD__));
+
+        try {
+            $this->fail1();
+        } catch (\Exception $e) {
+            Log::info($e->getMessage());
+        }
+
+        throw new \Exception(\sprintf('%s failed.', __METHOD__));
+    }
+
+    public function fail8(): void
+    {
+        Log::info(\sprintf('%s started.', __METHOD__));
+
+        try {
+            $this->fail1();
+        } catch (\Exception $e) {
+            Log::info($e->getMessage());
+        }
+
+        try {
+            $this->fail3();
+        } catch (\Exception $e) {
+            Log::info($e->getMessage());
+        }
+
+        throw new \Exception(\sprintf('%s failed.', __METHOD__));
+    }
 }
